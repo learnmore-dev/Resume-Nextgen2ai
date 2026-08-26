@@ -1,0 +1,32 @@
+.driven-template {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #FFFFFF;
+  color: #1E293B;
+  min-height: 800px;
+}
+
+.driven-header {
+  background-color: #FACC15;
+  padding: 32px 36px;
+  border-bottom: 4px solid #1E293B;
+}
+
+.driven-name {
+  font-size: 26px;
+  font-weight: 900;
+  color: #0F172A;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.driven-section-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #0F172A;
+  border-bottom: 2px solid #0F172A;
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+}

@@ -1,0 +1,33 @@
+.modern-template {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #FFFFFF;
+  color: #0F172A;
+  padding: 40px;
+  min-height: 800px;
+}
+
+.modern-header-banner {
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
+  color: #FFFFFF;
+  padding: 28px 32px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.modern-name {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.modern-section-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #2563EB;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #2563EB;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}

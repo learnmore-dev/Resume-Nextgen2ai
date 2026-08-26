@@ -1,0 +1,71 @@
+.axis-template {
+  display: flex;
+  min-height: 800px;
+  font-family: 'Inter', sans-serif;
+  background-color: #FFFFFF;
+  color: #1E293B;
+}
+
+.axis-main-column {
+  flex: 1;
+  padding: 36px 32px;
+}
+
+.axis-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0F172A;
+  margin-bottom: 2px;
+}
+
+.axis-title {
+  font-size: 13px;
+  color: #64748B;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.axis-section-heading {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0F4652;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #0F4652;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}
+
+.axis-sidebar {
+  width: 230px;
+  background-color: #0F4652;
+  color: #FFFFFF;
+  padding: 36px 20px;
+}
+
+.axis-sidebar-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #93C5FD;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 4px;
+}
+
+.axis-skill-bar-bg {
+  height: 4px;
+  background-color: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 3px;
+}
+
+.axis-skill-bar-fill {
+  height: 100%;
+  background-color: #38BDF8;
+  border-radius: 2px;
+}
