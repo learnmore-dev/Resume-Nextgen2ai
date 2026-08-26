@@ -42,8 +42,8 @@ export const LandingPage = () => {
 
   const faqs = [
     {
-      q: "What is HireMint?",
-      a: "HireMint is an intelligent resume builder that uses advanced AI to help you create professional, ATS-friendly resumes in minutes. It analyzes your experience and suggests improvements to increase your chances of getting hired."
+      q: "What is ResumeNova?",
+      a: "ResumeNova is an intelligent resume builder that uses advanced AI to help you create professional, ATS-friendly resumes in minutes. It analyzes your experience and suggests improvements to increase your chances of getting hired."
     },
     {
       q: "How do I create a resume?",
@@ -54,7 +54,7 @@ export const LandingPage = () => {
       a: "Yes, absolutely. We prioritize data privacy and security. Your personal information is encrypted and stored securely. We do not share your data with third parties without your consent."
     },
     {
-      q: "Can I build a cover letter with HireMint?",
+      q: "Can I build a cover letter with ResumeNova?",
       a: "Yes! Our tools include AI summary and cover letter generators that match your resume's design and craft compelling narratives tailored to target job descriptions."
     },
     {
@@ -484,7 +484,7 @@ export const LandingPage = () => {
         <div className="footer-container">
           <div className="footer-top">
             <div className="footer-col">
-              <h3>HireMint</h3>
+              <h3>ResumeNova</h3>
               <p className="footer-tagline">Intelligent AI Resume Builder & ATS Scanner</p>
             </div>
             <div className="footer-col">
@@ -506,7 +506,7 @@ export const LandingPage = () => {
           </div>
 
           <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} HireMint. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} ResumeNova. All rights reserved.</p>
           </div>
         </div>
       </footer>

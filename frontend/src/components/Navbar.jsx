@@ -36,7 +36,7 @@ export const Navbar = () => {
           </div>
           <div className="brand-text-group">
             <span className="brand-title" style={{ fontSize: '1.4rem', color: '#0F172A', fontWeight: '800' }}>
-              Hire<span style={{ color: '#ee571d' }}>Mint</span>
+              Resume<span style={{ color: '#ee571d' }}>Nova</span>
             </span>
           </div>
         </Link>
