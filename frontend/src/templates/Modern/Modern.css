@@ -1,9 +1,11 @@
 .modern-template {
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
+  color: #1E293B;
   background-color: #FFFFFF;
-  color: #0F172A;
-  padding: 40px;
-  min-height: 800px;
+  padding: 24px 32px;
+  min-height: auto;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .modern-header-banner {

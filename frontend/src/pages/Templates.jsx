@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useResume } from '../context/ResumeContext';
 import { resumeApi } from '../api/resumeApi';
 import { TemplateRenderer } from './ResumeBuilder/templates/TemplateRenderer';
+import { FileText, ArrowRight, ShieldCheck, LayoutGrid, Edit3, CloudDownload } from 'lucide-react';
 
 const TEMPLATES_DATA = [
   { id: 1, name: 'Achiever', category: 'Professional', layout: 'sidebar-left', color: '#16697a', tag: 'ATS-FRIENDLY' },
@@ -40,7 +41,7 @@ const MANISHA_SAMPLE_DATA = {
     linkedin_url: 'https://linkedin.com/in/manishachauhan',
     github_url: 'https://github.com/manisha',
     portfolio_url: 'https://manisha-portfolio.com',
-    summary: 'Full Stack Developer with strong foundations in JavaScript, HTML, CSS, and React.js, and hands-on experience building scalable applications using React, Next.js, Node.js, and PostgreSQL. Experienced in developing RESTful APIs and client–server architectures through internship and full-stack projects. Built AI-powered applications with exposure to Agile development and Git workflows. Solved 500+ DSA problems demonstrating strong problem-solving skills. Collaborative team player eager to learn, take feedback, and grow in fast-paced environments.'
+    summary: 'Full Stack Developer with strong foundations in JavaScript, HTML, CSS, and React.js, and hands-on experience building scalable applications using React, Next.js, Node.js, and PostgreSQL. Experienced in developing RESTful APIs and client-server architectures through internship and full-stack projects. Built AI-powered applications with exposure to Agile development and Git workflows. Solved 500+ DSA problems demonstrating strong problem-solving skills. Collaborative team player eager to learn, take feedback, and grow in fast-paced environments.'
   },
   target_job_title: 'Full Stack Developer',
   experience: [
@@ -93,7 +94,7 @@ const MANISHA_SAMPLE_DATA = {
     {
       id: 1,
       institution: 'Indus Institute of Technology, Ahmedabad',
-      degree: 'Bachelor of Technology (B.Tech.) — CSE | CGPA: 9.2/10',
+      degree: 'Bachelor of Technology (B.Tech.) - CSE | CGPA: 9.2/10',
       field_of_study: 'Computer Science & Engineering',
       start_date: 'Sep 2022',
       end_date: 'May 2026'
@@ -101,7 +102,7 @@ const MANISHA_SAMPLE_DATA = {
     {
       id: 2,
       institution: 'Shri Raghubir High School, Palghar',
-      degree: 'Intermediate (Class 12) — 81%',
+      degree: 'Intermediate (Class 12) - 81%',
       field_of_study: 'Science',
       start_date: 'Jun 2021',
       end_date: 'May 2022'
@@ -118,8 +119,8 @@ const MANISHA_SAMPLE_DATA = {
     { category: 'Soft Skills', skill_name: 'Strong Communication, Technical Documentation, Analytical Thinking, Team Collaboration' }
   ],
   achievements: [
-    { title: 'Top 15 – HackHazards Hackathon 2025 (Fluvio Track) for DevNest AI.', date: 'May 2025' },
-    { title: 'Solved 500+ DSA problems on LeetCode & GeeksforGeeks using Java.', date: 'Oct 2024 – Jan 2026' }
+    { title: 'Top 15 - HackHazards Hackathon 2025 (Fluvio Track) for DevNest AI.', date: 'May 2025' },
+    { title: 'Solved 500+ DSA problems on LeetCode & GeeksforGeeks using Java.', date: 'Oct 2024 - Jan 2026' }
   ]
 };
 
@@ -138,7 +139,7 @@ export const Templates = () => {
         title: `Resume - ${tpl.name}`,
         template_id: tpl.id
       });
-      // Pre-fill with Manisha Chauhan's resume data
+      // Pre-fill personal info safely
       if (MANISHA_SAMPLE_DATA.personal_info) {
         try {
           await resumeApi.updatePersonalInfo(newResume.id, MANISHA_SAMPLE_DATA.personal_info);
@@ -148,10 +149,11 @@ export const Templates = () => {
       }
       navigate(`/builder/${newResume.id}`);
     } catch (e) {
+      console.error('Template creation error', e);
       if (resumes && resumes.length > 0) {
         navigate(`/builder/${resumes[0].id}`);
       } else {
-        navigate('/create-resume');
+        navigate('/templates');
       }
     } finally {
       setLoadingId(null);
@@ -171,27 +173,99 @@ export const Templates = () => {
     <div className="templates-showcase-page">
       {/* Header Banner */}
       <section className="templates-hero-banner">
+        {/* Background Decorative Graphics */}
+        <div className="hero-dots-pattern hero-dots-left"></div>
+        <div className="hero-dots-pattern hero-dots-right"></div>
+        <div className="hero-resume-wireframe hero-wireframe-right"></div>
+        <div className="hero-resume-wireframe hero-wireframe-left"></div>
+
         <div className="templates-hero-container">
           <div className="templates-breadcrumb">
             <span onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>AI Resume Builder</span>
-            <span className="sep">»</span>
+            <span className="sep">›</span>
             <span className="active">Resume Templates</span>
           </div>
 
           <h1 className="templates-main-heading">
-            Free, Customizable Resume Templates<br /> for Every Career Level
+            Build a Resume<br />
+            That Gets You <span className="highlight-noticed">Noticed</span>
           </h1>
 
+          {/* Star Accent Divider */}
+          <div className="templates-star-divider">
+            <span className="star-line"></span>
+            <span className="star-icon">★</span>
+            <span className="star-line"></span>
+          </div>
+
           <p className="templates-hero-desc">
-            Design a resume that's both professional and personal. Our collection of resume templates helps you build a standout resume effortlessly—no design skills needed. Whether you're just starting out or making a career change, each template is ATS-friendly, easy to edit, and built to impress hiring managers across industries.
+            Create a polished, job-ready resume with professionally designed templates.<br />
+            Choose a style that fits your career, customize every section,<br />
+            and present your skills with confidence.
           </p>
 
           <button 
             onClick={() => handleUseTemplate(TEMPLATES_DATA[0])}
-            className="btn-templates-create"
+            className="btn-templates-create-orange"
           >
-            Create Your Resume
+            <FileText size={20} />
+            <span>Build My Resume</span>
+            <ArrowRight size={20} />
           </button>
+
+          {/* Trust Badges */}
+          <div className="templates-trust-badges">
+            <span className="trust-item">
+              <ShieldCheck size={16} color="#34D399" /> 100% Free
+            </span>
+            <span className="trust-dot">•</span>
+            <span className="trust-item">No Sign Up Required</span>
+            <span className="trust-dot">•</span>
+            <span className="trust-item">ATS-Friendly</span>
+          </div>
+
+          {/* 4 Bottom Feature Pill Cards */}
+          <div className="templates-features-glass-bar">
+            <div className="feature-pill-card">
+              <div className="feature-pill-icon icon-teal">
+                <LayoutGrid size={20} />
+              </div>
+              <div className="feature-pill-text">
+                <h4>Professional Templates</h4>
+                <p>Designed by experts</p>
+              </div>
+            </div>
+
+            <div className="feature-pill-card">
+              <div className="feature-pill-icon icon-blue">
+                <Edit3 size={20} />
+              </div>
+              <div className="feature-pill-text">
+                <h4>Easy Customization</h4>
+                <p>Edit in minutes</p>
+              </div>
+            </div>
+
+            <div className="feature-pill-card">
+              <div className="feature-pill-icon icon-purple">
+                <CloudDownload size={20} />
+              </div>
+              <div className="feature-pill-text">
+                <h4>Download Instantly</h4>
+                <p>PDF, ready to share</p>
+              </div>
+            </div>
+
+            <div className="feature-pill-card">
+              <div className="feature-pill-icon icon-green">
+                <ShieldCheck size={20} />
+              </div>
+              <div className="feature-pill-text">
+                <h4>ATS Optimized</h4>
+                <p>Increase your chances</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -215,7 +289,7 @@ export const Templates = () => {
         <div className="templates-grid-container">
           <div className="templates-cards-grid">
             {filteredTemplates.map(tpl => (
-              <div key={tpl.id} className="template-card-box">
+              <div key={tpl.id} className="template-card-box" onClick={() => handleUseTemplate(tpl)} style={{ cursor: 'pointer' }}>
                 <div className="card-mockup-area">
                   {/* Badge top right */}
                   <span className="card-tag-badge">{tpl.tag}</span>
@@ -243,11 +317,14 @@ export const Templates = () => {
                   {/* Hover Overlay with Orange Button matching Image 2 */}
                   <div className="card-hover-overlay">
                     <button 
-                      onClick={() => handleUseTemplate(tpl)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleUseTemplate(tpl);
+                      }}
                       disabled={loadingId === tpl.id}
                       className="btn-edit-template-orange"
                     >
-                      {loadingId === tpl.id ? 'Starting...' : 'Edit This Template'}
+                      {loadingId === tpl.id ? 'Loading...' : 'Edit This Template'}
                     </button>
                   </div>
                 </div>

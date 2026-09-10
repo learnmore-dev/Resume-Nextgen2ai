@@ -53,6 +53,7 @@ class Project(models.Model):
     description = models.TextField(blank=True, default='')
     tech_stack = models.JSONField(default=list, blank=True)
     link = models.URLField(max_length=255, blank=True, default='')
+    date = models.CharField(max_length=50, blank=True, default='')
     bullets = models.JSONField(default=list, blank=True)
     order_index = models.IntegerField(default=0)
 

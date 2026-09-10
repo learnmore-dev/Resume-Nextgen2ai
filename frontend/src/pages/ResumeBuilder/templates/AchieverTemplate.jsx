@@ -5,6 +5,7 @@ export const AchieverTemplate = ({ resume }) => {
   const skills = resume.skills || [];
   const exp = resume.experience || [];
   const edu = resume.education || [];
+  const projects = resume.projects || [];
 
   return (
     <div className="tpl-achiever" style={{
@@ -140,6 +141,56 @@ export const AchieverTemplate = ({ resume }) => {
               <div style={{ fontSize: '11px', fontStyle: 'italic', color: '#4B5563', paddingLeft: '16px' }}>
                 {e.degree} {e.field_of_study && `in ${e.field_of_study}`}
               </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {/* Key Projects */}
+      {projects.length > 0 && (
+        <>
+          <div style={{
+            textAlign: 'center',
+            borderTop: '1px solid #1A1A1A',
+            borderBottom: '1px solid #1A1A1A',
+            padding: '3px 0',
+            margin: '18px 0 12px',
+            fontSize: '12px',
+            fontWeight: '700',
+            letterSpacing: '2px',
+            textTransform: 'uppercase'
+          }}>
+            KEY PROJECTS
+          </div>
+          {projects.map(p => (
+            <div key={p.id} style={{ marginBottom: '14px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '700' }}>
+                <span>
+                  ❖ {p.name}
+                  {p.tech_stack && (
+                    <span style={{ fontWeight: 'normal', fontStyle: 'italic', color: '#4B5563', marginLeft: '6px' }}>
+                      | {Array.isArray(p.tech_stack) ? p.tech_stack.join(', ') : p.tech_stack}
+                    </span>
+                  )}
+                  {p.link && (
+                    <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#2563EB', marginLeft: '8px', textDecoration: 'underline', fontSize: '11px' }}>
+                      Link
+                    </a>
+                  )}
+                </span>
+                <span style={{ fontStyle: 'italic', fontWeight: 'normal', fontSize: '11px', color: '#4B5563' }}>
+                  {p.date || (p.name?.includes('E-Commerce') ? 'Jan 2026 – Feb 2026' : (p.name?.includes('HR') ? 'Feb 2026 – Mar 2026' : '2025 - 2026'))}
+                </span>
+              </div>
+              {p.bullets && p.bullets.length > 0 ? (
+                <ul style={{ paddingLeft: '24px', margin: '4px 0 0', fontSize: '11px', color: '#374151' }}>
+                  {p.bullets.map((b, i) => (
+                    <li key={i} style={{ marginBottom: '2px' }}>{b}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ fontSize: '11px', color: '#374151', margin: '4px 0 0 16px' }}>{p.description}</p>
+              )}
             </div>
           ))}
         </>

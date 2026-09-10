@@ -29,6 +29,7 @@ export const ResumeProvider = ({ children }) => {
       return res.data;
     } catch (e) {
       console.error('Failed to fetch resume detail', e);
+      throw e;
     } finally {
       setLoading(false);
     }
@@ -36,6 +37,7 @@ export const ResumeProvider = ({ children }) => {
 
   const createResume = async (data) => {
     const res = await resumeApi.createResume(data);
+    setActiveResume(res.data);
     setResumes(prev => [res.data, ...prev]);
     return res.data;
   };

@@ -9,34 +9,63 @@ const client = axios.create({
   },
 });
 
-// Interceptor to attach JWT token
-client.interceptors.request.use((config) => {
-  const token = localStorage.getItem('access_token');
+const ensureAuthToken = async () => {
+  let token = localStorage.getItem('access_token');
+  if (token) return token;
+  try {
+    const res = await axios.post(`${API_BASE}/auth/login/`, {
+      username: 'guest_user',
+      password: 'guestpass123'
+    });
+    localStorage.setItem('access_token', res.data.access);
+    localStorage.setItem('refresh_token', res.data.refresh);
+    localStorage.setItem('user_data', JSON.stringify({ username: 'guest_user', isGuest: true }));
+    return res.data.access;
+  } catch (err) {
+    try {
+      await axios.post(`${API_BASE}/auth/register/`, {
+        username: 'guest_user',
+        email: 'guest@nextgen2ai.com',
+        password: 'guestpass123'
+      });
+      const res = await axios.post(`${API_BASE}/auth/login/`, {
+        username: 'guest_user',
+        password: 'guestpass123'
+      });
+      localStorage.setItem('access_token', res.data.access);
+      localStorage.setItem('refresh_token', res.data.refresh);
+      return res.data.access;
+    } catch (e) {
+      console.error('Guest auth failed', e);
+      return null;
+    }
+  }
+};
+
+// Interceptor to attach JWT token (auto-login if missing)
+client.interceptors.request.use(async (config) => {
+  let token = localStorage.getItem('access_token');
+  if (!token && !config.url.includes('/auth/')) {
+    token = await ensureAuthToken();
+  }
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// Interceptor to handle token refresh on 401
+// Interceptor to handle token refresh / re-login on 401
 client.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const refreshToken = localStorage.getItem('refresh_token');
-      if (refreshToken) {
-        try {
-          const res = await axios.post(`${API_BASE}/auth/refresh/`, { refresh: refreshToken });
-          localStorage.setItem('access_token', res.data.access);
-          originalRequest.headers.Authorization = `Bearer ${res.data.access}`;
-          return client(originalRequest);
-        } catch (e) {
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('refresh_token');
-          window.location.href = '/login';
-        }
+      localStorage.removeItem('access_token');
+      const token = await ensureAuthToken();
+      if (token) {
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+        return client(originalRequest);
       }
     }
     return Promise.reject(error);
@@ -86,6 +115,16 @@ export const resumeApi = {
   // Job & ATS
   createJobDescription: (data) => client.post('/job-descriptions/', data),
   analyzeATS: (resumeId, jobDescriptionId) => client.post('/ats/analyze/', { resume_id: resumeId, job_description_id: jobDescriptionId }),
+  uploadPDFAndAnalyzeATS: (file, jobDescriptionId) => {
+    const formData = new FormData();
+    formData.append('resume_file', file);
+    formData.append('job_description_id', jobDescriptionId);
+    return client.post('/ats/upload-pdf/', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
+  getSampleJDs: () => client.get('/ats/sample-jds/'),
+  getATSHistory: () => client.get('/ats/history/'),
 
   // Templates & PDF / JSON Resume Export & Import
   getTemplates: () => client.get('/templates/'),

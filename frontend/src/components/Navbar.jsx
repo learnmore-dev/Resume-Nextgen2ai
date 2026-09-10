@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useResume } from '../context/ResumeContext';
-import { Sparkles, ChevronDown, FileText, Target, Layout, ShieldCheck } from 'lucide-react';
+import { Sparkles, ChevronDown, FileText, Target, Layout, ShieldCheck, Menu, X } from 'lucide-react';
 
 export const Navbar = () => {
   const { resumes, createResume } = useResume();
@@ -10,27 +10,18 @@ export const Navbar = () => {
   const location = useLocation();
   const [toolsDropdown, setToolsDropdown] = useState(false);
   const [careerDropdown, setCareerDropdown] = useState(false);
-
-  if (location.pathname.startsWith('/create-resume')) return null;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleBuildClick = async () => {
-    if (resumes && resumes.length > 0) {
-      navigate(`/builder/${resumes[0].id}`);
-    } else {
-      try {
-        const newResume = await createResume({ title: 'My Resume', template_id: 1 });
-        navigate(`/builder/${newResume.id}`);
-      } catch (e) {
-        navigate('/create-resume');
-      }
-    }
+    setMobileMenuOpen(false);
+    navigate('/templates');
   };
 
   return (
     <header className="site-header">
       <div className="header-container">
         {/* Brand Logo */}
-        <Link to="/" className="brand-logo-container">
+        <Link to="/" className="brand-logo-container" onClick={() => setMobileMenuOpen(false)}>
           <div className="sparkle-icon-wrapper" style={{ background: '#ee571d' }}>
             <Sparkles size={20} className="sparkle-icon" color="#fff" />
           </div>
@@ -41,12 +32,12 @@ export const Navbar = () => {
           </div>
         </Link>
 
-        {/* Center Navigation Links */}
-        <nav className="center-nav-links">
+        {/* Center Navigation Links (Desktop) */}
+        <nav className="center-nav-links desktop-nav">
           <Link to="/templates" className="nav-item">
             Resume Templates
           </Link>
-          <Link to="/job-analyzer" className="nav-item">
+          <Link to="/objectives-summaries" className="nav-item">
             Objectives & Summaries
           </Link>
 
@@ -61,11 +52,11 @@ export const Navbar = () => {
             </span>
             {careerDropdown && (
               <div className="nav-dropdown-menu">
-                <Link to="/job-analyzer" className="dropdown-link">
+                <Link to="/career-advice" className="dropdown-link">
                   <Target size={16} /> Resume Writing Guide
                 </Link>
-                <Link to="/templates" className="dropdown-link">
-                  <Layout size={16} /> Cover Letters
+                <Link to="/career-advice" className="dropdown-link">
+                  <Layout size={16} /> Career & Interview Tips
                 </Link>
               </div>
             )}
@@ -93,8 +84,8 @@ export const Navbar = () => {
           </div>
         </nav>
 
-        {/* Right CTA Button */}
-        <div className="header-actions">
+        {/* Right Actions (Desktop) */}
+        <div className="header-actions desktop-actions">
           <button 
             onClick={handleBuildClick} 
             className="btn-build-resume-orange"
@@ -112,7 +103,61 @@ export const Navbar = () => {
             Build My Resume
           </button>
         </div>
+
+        {/* Hamburger Toggle Button (Mobile) */}
+        <button
+          type="button"
+          className="mobile-menu-toggle"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Toggle navigation menu"
+        >
+          {mobileMenuOpen ? <X size={24} color="#0F172A" /> : <Menu size={24} color="#0F172A" />}
+        </button>
       </div>
+
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div className="mobile-nav-drawer">
+          <Link to="/templates" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
+            <Layout size={18} /> Resume Templates
+          </Link>
+          <Link to="/objectives-summaries" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
+            <Sparkles size={18} /> Objectives & Summaries
+          </Link>
+          <Link to="/career-advice" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
+            <Target size={18} /> Career Advice & Guide
+          </Link>
+          <Link to="/job-analyzer" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
+            <ShieldCheck size={18} /> Free ATS Resume Checker
+          </Link>
+          <Link to="/dashboard" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
+            <FileText size={18} /> Dashboard
+          </Link>
+          <div style={{ paddingTop: '10px' }}>
+            <button 
+              onClick={handleBuildClick} 
+              className="btn-build-resume-orange"
+              style={{ 
+                width: '100%',
+                backgroundColor: '#ee571d', 
+                color: '#fff', 
+                padding: '12px 20px', 
+                borderRadius: '8px',
+                fontWeight: 700,
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px'
+              }}
+            >
+              <Sparkles size={18} /> Build My Resume
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

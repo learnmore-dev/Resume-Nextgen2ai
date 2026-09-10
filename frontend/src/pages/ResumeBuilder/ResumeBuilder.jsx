@@ -10,7 +10,7 @@ import { SkillsForm } from './SkillsForm';
 import { AchievementsForm } from './AchievementsForm';
 import { ResumePreview } from './ResumePreview';
 import { TemplateRenderer } from './templates/TemplateRenderer';
-import { ArrowLeft, Download, Target, Layout, Eye, X } from 'lucide-react';
+import { ArrowLeft, Download, Target, Layout, Eye, X, User, Briefcase, GraduationCap, FolderGit2, Cpu, Award } from 'lucide-react';
 
 export const ResumeBuilder = () => {
   const { id } = useParams();
@@ -20,15 +20,49 @@ export const ResumeBuilder = () => {
   const [downloading, setDownloading] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
+  const [loadingResume, setLoadingResume] = useState(() => !activeResume || String(activeResume?.id) !== String(id));
+  const [loadError, setLoadError] = useState(null);
+
   useEffect(() => {
-    fetchResumeDetail(id);
+    let isMounted = true;
+    if (id) {
+      if (!activeResume || String(activeResume.id) !== String(id)) {
+        setLoadingResume(true);
+      }
+      setLoadError(null);
+      fetchResumeDetail(id)
+        .then(() => {
+          if (isMounted) setLoadingResume(false);
+        })
+        .catch((err) => {
+          if (isMounted) {
+            console.error('Failed to load resume', err);
+            setLoadError('Resume could not be loaded or was not found.');
+            setLoadingResume(false);
+          }
+        });
+    }
+    return () => { isMounted = false; };
   }, [id]);
+
+  // Restrict direct browser printing (Ctrl+P / Cmd+P)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') {
+        e.preventDefault();
+        alert('⚠️ Direct Browser Printing (Ctrl + P) is Restricted!\n\nTo ensure your resume layout and styling are preserved, please use the official "Download PDF" button at the top.');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handleUpdate = () => {
     fetchResumeDetail(id);
   };
 
   const handleDownload = async () => {
+    if (!activeResume) return;
     setDownloading(true);
     try {
       const response = await resumeApi.exportPDF(activeResume.id, activeResume.template_id);
@@ -48,104 +82,129 @@ export const ResumeBuilder = () => {
     }
   };
 
-  if (!activeResume) {
+  if (loadError) {
     return (
-      <div style={{ padding: '4rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-        Loading Resume Builder...
+      <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center' }}>
+        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚠️</div>
+        <h3 style={{ fontSize: '1.25rem', color: '#EF4444', marginBottom: '0.5rem' }}>Resume #{id} Not Found</h3>
+        <p style={{ color: '#64748B', maxWidth: '400px', marginBottom: '1.5rem' }}>
+          We could not load this resume. You can select another resume from your dashboard or create a new one.
+        </p>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button onClick={() => navigate('/dashboard')} className="btn btn-primary">
+            Go to Dashboard
+          </button>
+          <button onClick={() => navigate('/create-resume')} className="btn btn-secondary">
+            Create New Resume
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadingResume || !activeResume || String(activeResume.id) !== String(id)) {
+    return (
+      <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
+        <div style={{ width: '40px', height: '40px', border: '3px solid #E2E8F0', borderTopColor: '#4F46E5', borderRadius: '50%', animation: 'spin 1s linear infinite', marginBottom: '1rem' }} />
+        <div style={{ fontWeight: '600', color: '#1E293B' }}>Loading Resume #{id}...</div>
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 72px)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 72px)', background: '#F0F7FF' }}>
       {/* Builder Top Bar */}
-      <div style={{ padding: '0.85rem 1.5rem', background: 'rgba(18, 24, 38, 0.95)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ padding: '0.85rem 1.5rem', background: '#FFFFFF', borderBottom: '1px solid #BFDBFE', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 2px 8px rgba(37, 99, 235, 0.06)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <button onClick={() => navigate('/dashboard')} className="btn btn-secondary" style={{ padding: '0.4rem 0.75rem', fontSize: '0.85rem' }}>
             <ArrowLeft size={16} /> Back
           </button>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <h2 style={{ fontSize: '1.15rem', fontFamily: 'var(--font-display)', color: '#FFFFFF' }}>{activeResume.title}</h2>
+              <h2 style={{ fontSize: '1.15rem', fontFamily: 'var(--font-display)', color: '#0F172A', fontWeight: '800', margin: 0 }}>{activeResume.title}</h2>
               {activeResume.is_master ? (
-                <span className="badge badge-master">Master Base</span>
+                <span className="badge" style={{ background: '#DBEAFE', color: '#1E40AF', border: '1px solid #BFDBFE', fontWeight: '700' }}>Master Base</span>
               ) : (
-                <span className="badge badge-tailored">Job Tailored</span>
+                <span className="badge" style={{ background: '#DCFCE7', color: '#15803D', border: '1px solid #86EFAC', fontWeight: '700' }}>Job Tailored</span>
               )}
             </div>
           </div>
         </div>
 
-        {/* Action Buttons with High Contrast Visibility */}
+        {/* Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <button
             onClick={() => navigate('/templates')}
             className="btn"
             style={{
               fontSize: '0.85rem',
-              background: 'rgba(255, 255, 255, 0.1)',
-              color: '#FFFFFF',
-              border: '1px solid rgba(255, 255, 255, 0.25)',
+              background: '#FFFFFF',
+              color: '#1E40AF',
+              border: '1px solid #93C5FD',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              fontWeight: '600'
             }}
           >
             <Layout size={15} /> Change Template
           </button>
 
-          {/* Bright High-Contrast Preview Button */}
           <button
             onClick={() => setShowPreviewModal(true)}
             className="btn"
             style={{
               fontSize: '0.85rem',
-              background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(37, 99, 235, 0.3))',
-              color: '#38BDF8',
-              border: '1px solid #38BDF8',
+              background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
+              color: '#FFFFFF',
+              border: 'none',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              fontWeight: '600',
-              boxShadow: '0 0 12px rgba(56, 189, 248, 0.25)'
+              fontWeight: '700',
+              boxShadow: '0 2px 8px rgba(37, 99, 235, 0.25)'
             }}
           >
-            <Eye size={15} color="#38BDF8" /> Preview
+            <Eye size={15} color="#FFFFFF" /> Preview
           </button>
 
-          <button onClick={() => navigate(`/job-analyzer?resume_id=${activeResume.id}`)} className="btn btn-ai" style={{ fontSize: '0.85rem' }}>
+          <button onClick={() => navigate(`/job-analyzer?resume_id=${activeResume.id}`)} className="btn btn-ai" style={{ fontSize: '0.85rem', fontWeight: '700' }}>
             <Target size={15} /> Check ATS Score
           </button>
           
-          <button onClick={handleDownload} disabled={downloading} className="btn btn-primary" style={{ fontSize: '0.85rem' }}>
+          <button onClick={handleDownload} disabled={downloading} className="btn btn-primary" style={{ fontSize: '0.85rem', fontWeight: '700' }}>
             <Download size={15} /> {downloading ? 'Preparing PDF...' : 'Download PDF'}
           </button>
         </div>
       </div>
 
-      {/* Split Pane Editor Layout */}
+      {/* Split Pane Editor Layout (42% Form / 58% Large Preview) */}
       <div className="builder-layout">
         {/* Left Column: Form Editor */}
         <div className="builder-editor">
-          {/* Section Selector Tabs */}
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem', overflowX: 'auto', paddingBottom: '0.25rem' }}>
+          {/* Section Selector Tabs with Modern Hover & Glow Animations */}
+          <div className="builder-tabs-container">
             {[
-              { id: 'personal', label: 'Personal Info' },
-              { id: 'experience', label: 'Experience' },
-              { id: 'education', label: 'Education' },
-              { id: 'projects', label: 'Projects' },
-              { id: 'skills', label: 'Skills' },
-              { id: 'achievements', label: 'Achievements' },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`btn ${activeTab === tab.id ? 'btn-primary' : 'btn-secondary'}`}
-                style={{ padding: '0.45rem 0.95rem', fontSize: '0.85rem', whiteSpace: 'nowrap' }}
-              >
-                {tab.label}
-              </button>
-            ))}
+              { id: 'personal', label: 'Personal Info', icon: User },
+              { id: 'experience', label: 'Experience', icon: Briefcase },
+              { id: 'education', label: 'Education', icon: GraduationCap },
+              { id: 'projects', label: 'Projects', icon: FolderGit2 },
+              { id: 'skills', label: 'Skills', icon: Cpu },
+              { id: 'achievements', label: 'Achievements', icon: Award },
+            ].map(tab => {
+              const IconComponent = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`builder-tab-btn ${isActive ? 'active' : ''}`}
+                >
+                  <IconComponent size={15} color={isActive ? '#FFFFFF' : '#2563EB'} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
 
           {activeTab === 'personal' && <PersonalInfoForm resume={activeResume} onUpdate={handleUpdate} />}
@@ -156,8 +215,8 @@ export const ResumeBuilder = () => {
           {activeTab === 'achievements' && <AchievementsForm resume={activeResume} onUpdate={handleUpdate} />}
         </div>
 
-        {/* Right Column: Live Resume Preview */}
-        <div>
+        {/* Right Column: Live Resume Preview (58% Width) */}
+        <div className="builder-preview-wrapper">
           <ResumePreview resume={activeResume} />
         </div>
       </div>
@@ -178,7 +237,6 @@ export const ResumeBuilder = () => {
             flexDirection: 'column'
           }}
         >
-          {/* Modal Fixed Sticky Header Control Bar */}
           <div
             style={{
               padding: '1rem 2rem',
@@ -186,7 +244,7 @@ export const ResumeBuilder = () => {
               borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
               display: 'flex',
               alignItems: 'center',
-              justify: 'space-between',
+              justifyContent: 'space-between',
               color: '#FFFFFF',
               zIndex: 10000
             }}
@@ -225,7 +283,6 @@ export const ResumeBuilder = () => {
             </div>
           </div>
 
-          {/* Modal Scrollable Container displaying 100% of Document */}
           <div
             style={{
               flex: 1,
@@ -259,3 +316,5 @@ export const ResumeBuilder = () => {
     </div>
   );
 };
+
+export default ResumeBuilder;

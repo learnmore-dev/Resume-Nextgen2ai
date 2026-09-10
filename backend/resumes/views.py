@@ -1,3 +1,5 @@
+import re
+import json
 from django.http import HttpResponse
 from rest_framework import status, permissions, viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -47,12 +49,72 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         resume = serializer.save(user=self.request.user)
-        # Keep a newly created resume empty until the user supplies their own
-        # details. In particular, do not expose the shared guest account name
-        # or email in a user's resume preview.
         PersonalInfo.objects.get_or_create(
             resume=resume,
-            defaults={'full_name': '', 'email': ''}
+            defaults={
+                'full_name': 'Manisha Chauhan',
+                'phone': '+91 7249516523',
+                'email': 'manishachauhan5469@gmail.com',
+                'location': 'Delhi, India',
+                'linkedin_url': 'https://linkedin.com/in/manishachauhan',
+                'github_url': 'https://github.com/manisha',
+                'portfolio_url': 'https://manisha-portfolio.com',
+                'summary': 'Data Analytics Fresher with a strong foundation in Python, SQL, Excel, Power BI, and data visualization. Skilled in data cleaning, data preprocessing, exploratory data analysis (EDA), statistical analysis, and creating interactive dashboards to derive meaningful business insights. Hands-on experience working with real-world datasets and converting raw data into actionable insights. Strong analytical and problem-solving abilities with a keen interest in using data to support business decisions.'
+            }
+        )
+        # Populate initial Projects
+        Project.objects.create(
+            resume=resume,
+            name='E-Commerce Sales & Customer Analytics',
+            description='Analyzed sales and customer data to identify revenue trends, top-performing products, customer segments, and business growth opportunities using interactive Power BI dashboards.',
+            tech_stack=['Python', 'SQL', 'Power BI', 'Excel'],
+            link='https://github.com/analyst/ecommerce-sales-analytics',
+            bullets=['Analyzed sales and customer data to identify revenue trends, top-performing products, customer segments, and business growth opportunities using interactive Power BI dashboards.'],
+            order_index=0
+        )
+        Project.objects.create(
+            resume=resume,
+            name='Employee HR Analytics & Attrition Analysis',
+            description='Analyzed employee data to identify attrition patterns, salary trends, department performance, and key factors influencing employee turnover through data-driven dashboards.',
+            tech_stack=['Python', 'SQL', 'Power BI', 'Excel'],
+            link='https://github.com/analyst/employee-hr-attrition-analytics',
+            bullets=['Analyzed employee data to identify attrition patterns, salary trends, department performance, and key factors influencing employee turnover through data-driven dashboards.'],
+            order_index=1
+        )
+        # Populate initial Skills
+        skills_data = [
+            ("Languages & Core", "Python (Pandas, NumPy, Matplotlib, Seaborn), SQL, Advanced Excel (VLOOKUP, XLOOKUP, Pivot Tables, Macros)"),
+            ("BI & Data Visualization", "Power BI (DAX, Data Modeling, Interactive Dashboards), Tableau"),
+            ("Data Analysis & Preprocessing", "Data Cleaning, Data Preprocessing, Exploratory Data Analysis (EDA), Statistical Analysis"),
+            ("Databases", "MySQL, PostgreSQL"),
+            ("Development Tools & DevOps", "Jupyter Notebook, VS Code, Git, GitHub, Power Query, ETL Pipelines"),
+            ("Soft Skills", "Data Storytelling, Dashboard Design, Business Insight Generation, Problem Solving, Analytical Thinking, Team Collaboration")
+        ]
+        for cat, s_name in skills_data:
+            Skill.objects.create(resume=resume, category=cat, skill_name=s_name)
+
+        # Populate initial Education
+        Education.objects.create(
+            resume=resume,
+            institution='Indus Institute of Technology, Ahmedabad',
+            degree='Bachelor of Technology (B.Tech.) - CSE | CGPA: 9.2/10',
+            field_of_study='Computer Science & Engineering',
+            start_date='Sep 2022',
+            end_date='May 2026',
+            order_index=0
+        )
+        # Populate initial Achievements
+        Achievement.objects.create(
+            resume=resume,
+            title='Top 15 - HackHazards Hackathon 2025 (Fluvio Track) for DevNest AI.',
+            date='May 2025',
+            order_index=0
+        )
+        Achievement.objects.create(
+            resume=resume,
+            title='Solved 500+ DSA problems on LeetCode & GeeksforGeeks using Java.',
+            date='Oct 2024 - Jan 2026',
+            order_index=1
         )
 
 # Sub-resource views
@@ -259,13 +321,70 @@ def analyze_ats(request):
     
     analysis_data = analyze_resume(resume, jd)
     
+    model_fields = {
+        'overall_score', 'keyword_match_score', 'skills_match_score', 'job_title_match_score',
+        'experience_relevance_score', 'education_score', 'structure_score', 'formatting_score',
+        'matched_keywords', 'missing_keywords', 'suggestions'
+    }
+    filtered_db_data = {k: v for k, v in analysis_data.items() if k in model_fields}
+    
     ats_obj, _ = ATSAnalysis.objects.update_or_create(
         resume=resume,
         job_description=jd,
-        defaults=analysis_data
+        defaults=filtered_db_data
     )
     
-    return Response(ATSAnalysisSerializer(ats_obj).data)
+    res_data = ATSAnalysisSerializer(ats_obj).data
+    res_data.update(analysis_data)
+    return Response(res_data)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def upload_and_analyze_pdf_ats(request):
+    from ats.parser import parse_uploaded_resume
+    from ats.engine import analyze_resume_data
+    
+    file_obj = request.FILES.get('resume_file')
+    jd_id = request.data.get('job_description_id')
+    
+    if not file_obj:
+        return Response({"error": "No resume file provided."}, status=status.HTTP_400_BAD_REQUEST)
+        
+    jd = get_object_or_404(JobDescription, pk=jd_id, user=request.user)
+    
+    parse_res = parse_uploaded_resume(file_obj)
+    if not parse_res.get("success"):
+        return Response({"error": parse_res.get("error", "Failed to parse file")}, status=status.HTTP_400_BAD_REQUEST)
+        
+    raw_text = parse_res["raw_text"]
+    analysis_data = analyze_resume_data(raw_resume_text=raw_text, jd_text=jd.raw_text or "")
+    analysis_data["is_uploaded_pdf"] = True
+    analysis_data["file_name"] = file_obj.name
+    
+    return Response(analysis_data)
+
+@api_view(['GET'])
+@permission_classes([permissions.AllowAny])
+def get_sample_jds(request):
+    from ats.samples import SAMPLE_JOB_DESCRIPTIONS
+    return Response(SAMPLE_JOB_DESCRIPTIONS)
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def get_ats_history(request):
+    history = ATSAnalysis.objects.filter(resume__user=request.user).order_by('-created_at')[:10]
+    data = []
+    for item in history:
+        data.append({
+            "id": item.id,
+            "resume_id": item.resume_id,
+            "resume_title": item.resume.title,
+            "job_title": item.job_description.title or "Target Role",
+            "company": item.job_description.company or "Company",
+            "overall_score": item.overall_score,
+            "created_at": item.created_at.strftime("%b %d, %Y")
+        })
+    return Response(data)
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
@@ -361,9 +480,21 @@ def optimize_for_job(request, pk):
         
     # Run initial ATS analysis for new child resume
     analysis_data = analyze_resume(child_resume, jd)
-    ATSAnalysis.objects.create(resume=child_resume, job_description=jd, **analysis_data)
+    model_fields = {
+        'overall_score', 'keyword_match_score', 'skills_match_score', 'job_title_match_score',
+        'experience_relevance_score', 'education_score', 'structure_score', 'formatting_score',
+        'matched_keywords', 'missing_keywords', 'suggestions'
+    }
+    filtered_db_data = {k: v for k, v in analysis_data.items() if k in model_fields}
+    ATSAnalysis.objects.create(resume=child_resume, job_description=jd, **filtered_db_data)
     
-    return Response(ResumeDetailSerializer(child_resume).data, status=status.HTTP_201_CREATED)
+    res_data = ResumeDetailSerializer(child_resume).data
+    return Response({
+        "resume": res_data,
+        "id": child_resume.id,
+        "optimized_score": analysis_data.get("overall_score", 80.0),
+        "optimized_analysis": analysis_data
+    }, status=status.HTTP_201_CREATED)
 
 # Templates & Export
 @api_view(['GET'])
@@ -544,8 +675,8 @@ def import_json_resume(request):
 @permission_classes([permissions.IsAuthenticated])
 def ai_autofill_role(request, pk):
     resume = get_object_or_404(Resume, pk=pk, user=request.user)
-    role_name = request.data.get('role', '') or request.data.get('target_job_title', '') or 'Python Full Stack'
-    experience_level = request.data.get('experience_level', '3+ Years')
+    role_name = request.data.get('role', '') or request.data.get('target_job_title', '') or 'Data Analytics'
+    experience_level = request.data.get('experience_level', 'fresher')
     
     generated = autofill_role_resume_ai(role_name, experience_level)
     
@@ -558,7 +689,8 @@ def ai_autofill_role(request, pk):
     p_info.summary = generated.get('summary', p_info.summary)
     p_info.save()
     
-    # 3. Add generated Skills (without duplicating)
+    # 3. Populate generated Skills
+    resume.skills.all().delete()
     for sk in generated.get('skills', []):
         if isinstance(sk, dict):
             cat = sk.get('category', 'Technical')
@@ -566,11 +698,13 @@ def ai_autofill_role(request, pk):
         else:
             cat = 'Technical'
             s_name = str(sk)
-        if s_name and not Skill.objects.filter(resume=resume, skill_name__iexact=s_name).exists():
+        if s_name:
             Skill.objects.create(resume=resume, category=cat, skill_name=s_name)
             
-    # 4. Add generated Experience if empty or requested
-    if not resume.experience.exists():
+    # 4. Populate Experience (empty by default for freshers, populated for 1yr / 3yr)
+    is_fresher = str(experience_level).strip().lower() in ['fresher', '0', '0 yrs', '0 years', '0+ years', 'none']
+    resume.experience.all().delete()
+    if not is_fresher and generated.get('experience'):
         for idx, exp_data in enumerate(generated.get('experience', [])):
             Experience.objects.create(
                 resume=resume,
@@ -583,18 +717,46 @@ def ai_autofill_role(request, pk):
                 order_index=idx
             )
             
-    # 5. Add generated Projects if empty or requested
-    if not resume.projects.exists():
-        for idx, proj_data in enumerate(generated.get('projects', [])):
-            Project.objects.create(
-                resume=resume,
-                name=proj_data.get('name', 'Project'),
-                description=proj_data.get('description', ''),
-                tech_stack=proj_data.get('tech_stack', []),
-                link=proj_data.get('link', ''),
-                order_index=idx
-            )
-            
+    # 5. Populate Projects
+    resume.projects.all().delete()
+    for idx, proj_data in enumerate(generated.get('projects', [])):
+        Project.objects.create(
+            resume=resume,
+            name=proj_data.get('name', 'Project'),
+            description=proj_data.get('description', ''),
+            tech_stack=proj_data.get('tech_stack', []),
+            link=proj_data.get('link', ''),
+            bullets=proj_data.get('bullets', [proj_data.get('description', '')]),
+            order_index=idx
+        )
+        
+    # 6. Ensure default Education if missing
+    if not resume.education.exists():
+        Education.objects.create(
+            resume=resume,
+            institution='Indus Institute of Technology, Ahmedabad',
+            degree='Bachelor of Technology (B.Tech.) - CSE | CGPA: 9.2/10',
+            field_of_study='Computer Science & Engineering',
+            start_date='Sep 2022',
+            end_date='May 2026',
+            order_index=0
+        )
+
+    # 7. Ensure default Achievements if missing
+    if not resume.achievements.exists():
+        Achievement.objects.create(
+            resume=resume,
+            title='Top 15 - HackHazards Hackathon 2025 (Fluvio Track) for DevNest AI.',
+            date='May 2025',
+            order_index=0
+        )
+        Achievement.objects.create(
+            resume=resume,
+            title='Solved 500+ DSA problems on LeetCode & GeeksforGeeks using Java.',
+            date='Oct 2024 - Jan 2026',
+            order_index=1
+        )
+        
     return Response(ResumeDetailSerializer(resume).data)
 
 

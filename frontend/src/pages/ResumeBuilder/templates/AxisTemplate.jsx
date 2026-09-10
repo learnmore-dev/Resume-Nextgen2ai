@@ -5,6 +5,7 @@ export const AxisTemplate = ({ resume }) => {
   const skills = resume.skills || [];
   const exp = resume.experience || [];
   const edu = resume.education || [];
+  const projects = resume.projects || [];
 
   return (
     <div className="tpl-axis" style={{
@@ -51,6 +52,44 @@ export const AxisTemplate = ({ resume }) => {
                   </ul>
                 ) : (
                   <p style={{ fontSize: '11px', color: '#334155', margin: 0 }}>{item.raw_description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Projects */}
+        {projects.length > 0 && (
+          <div style={{ marginBottom: '20px' }}>
+            <h3 style={{ fontSize: '12px', fontWeight: '800', color: '#0F4652', textTransform: 'uppercase', letterSpacing: '1px', borderBottom: '2px solid #0F4652', paddingBottom: '4px', marginBottom: '12px' }}>
+              Projects
+            </h3>
+            {projects.map(p => (
+              <div key={p.id} style={{ marginBottom: '14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#0F172A' }}>
+                    {p.name}
+                    {p.tech_stack && (
+                      <span style={{ fontWeight: 'normal', fontStyle: 'italic', color: '#64748B', marginLeft: '6px', fontSize: '11px' }}>
+                        | {Array.isArray(p.tech_stack) ? p.tech_stack.join(', ') : p.tech_stack}
+                      </span>
+                    )}
+                    {p.link && (
+                      <a href={p.link} target="_blank" rel="noopener noreferrer" style={{ color: '#0F4652', marginLeft: '8px', textDecoration: 'underline', fontSize: '11px' }}>
+                        Link
+                      </a>
+                    )}
+                  </div>
+                  <div style={{ fontSize: '10px', color: '#64748B', fontStyle: 'italic' }}>
+                    {p.date || (p.name?.includes('E-Commerce') ? 'Jan 2026 – Feb 2026' : (p.name?.includes('HR') ? 'Feb 2026 – Mar 2026' : '2025 - 2026'))}
+                  </div>
+                </div>
+                {p.bullets && p.bullets.length > 0 ? (
+                  <ul style={{ paddingLeft: '16px', margin: '4px 0 0', fontSize: '11px', color: '#334155' }}>
+                    {p.bullets.map((b, i) => <li key={i} style={{ marginBottom: '2px' }}>{b}</li>)}
+                  </ul>
+                ) : (
+                  <p style={{ fontSize: '11px', color: '#334155', margin: '4px 0 0' }}>{p.description}</p>
                 )}
               </div>
             ))}

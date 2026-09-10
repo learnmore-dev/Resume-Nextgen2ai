@@ -78,68 +78,114 @@ export const LandingPage = () => {
   return (
     <div className="resume-ai-landing">
       {/* 1. Header Hero Block */}
-      <section className="header-block">
-        <div className="header-bg-glow"></div>
-        <div className="header-content-container">
-          <div className="header-text-group">
-            <p className="header-eyebrow">
-              <Sparkles className="inline-icon" size={16} /> Supercharge Your Job Search
-            </p>
-            <h1 className="header-title">
-              <span>Free </span>AI Resume Builder
-            </h1>
-            <p className="header-desc">
-              Elevate your job hunt with an AI-crafted resume that highlights your strengths and accelerates results. Save time, impress recruiters, and secure more interviews.
-            </p>
+      <section className="home-hero-section">
+        {/* Background Decorative Graphics */}
+        <div className="home-hero-dots home-dots-left"></div>
+        <div className="home-hero-dots home-dots-right"></div>
+        <div className="home-hero-wireframe home-wireframe-resume"></div>
+        <div className="home-hero-wireframe home-wireframe-briefcase"></div>
+
+        <div className="home-hero-container">
+          {/* Top Pill Badge */}
+          <div className="home-hero-pill-badge">
+            <Sparkles size={14} color="#38BDF8" />
+            <span>SMART RESUME. BETTER OPPORTUNITIES.</span>
           </div>
 
-          <div className="resume-upload-widget">
-            <div className="widget-container">
-              <div 
-                className="upload-box-link"
-                onClick={() => navigate('/job-analyzer')}
-              >
-                <div className="upload-box">
-                  <div className="upload-icon-illustration">
-                    <div className="mini-resume-doc">
-                      <div className="mini-doc-header">
-                        <div className="mini-avatar"></div>
-                      </div>
-                      <div className="mini-doc-lines">
-                        <div className="mini-line"></div>
-                        <div className="mini-line short"></div>
-                        <div className="mini-line"></div>
-                        <div className="mini-line short"></div>
-                      </div>
-                      <div className="mini-check-badge">
-                        <Check size={12} color="#fff" strokeWidth={3} />
-                      </div>
+          {/* Main Title */}
+          <h1 className="home-hero-title">
+            AI-Powered Resumes<br />
+            That <span className="highlight-noticed">Open Doors</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p className="home-hero-desc">
+            Create a strong, personalized resume in minutes.<br />
+            Highlight your skills, showcase your achievements,<br />
+            and stand out to every recruiter.
+          </p>
+
+          {/* Center Interactive Glass Card */}
+          <div className="home-hero-center-card-wrapper">
+            <div className="home-hero-center-card">
+              <div className="hero-card-icon-area">
+                <span className="card-sparkle sparkle-1">✦</span>
+                <span className="card-sparkle sparkle-2">✦</span>
+                <span className="card-sparkle sparkle-3">✦</span>
+                <div className="hero-mini-resume-doc">
+                  <div className="mini-doc-profile-row">
+                    <div className="mini-doc-user-icon">👤</div>
+                    <div className="mini-doc-user-lines">
+                      <div className="mini-user-line"></div>
+                      <div className="mini-user-line short"></div>
                     </div>
                   </div>
-                  <div className="upload-text-group">
-                    <p className="upload-heading">Ready to check your resume?</p>
-                    <p className="upload-subheading">Click here to get your free ATS analysis</p>
+                  <div className="mini-doc-body-lines">
+                    <div className="mini-body-line"></div>
+                    <div className="mini-body-line"></div>
+                    <div className="mini-body-line short"></div>
                   </div>
+                  <div className="mini-doc-green-check">✓</div>
                 </div>
               </div>
 
-              <button 
-                onClick={() => navigate('/job-analyzer')}
-                className="btn-check-resume"
-              >
-                <span>Check Your Resume<br /><small style={{ fontSize: '0.82em', opacity: 0.9 }}>It's free & instant</small></span>
-                <ArrowRight className="btn-arrow" size={20} />
-              </button>
+              <h3 className="hero-center-card-title">Let’s build your winning resume!</h3>
+              <p className="hero-center-card-subtitle">Get a free AI review and tips to improve your resume.</p>
 
-              <p className="widget-or">or</p>
-
-              <button 
-                onClick={handleStartBuilding}
-                disabled={creating}
-                className="btn-build-resume"
-              >
-                <span>{creating ? 'Starting Builder...' : 'Build Your Resume'}</span>
+              <button onClick={() => navigate('/templates')} className="btn-home-hero-orange">
+                <span>Review My Resume</span>
+                <ArrowRight size={20} />
               </button>
+            </div>
+
+            {/* Floating Resume Score Badge */}
+            <div className="hero-floating-score-badge">
+              <span className="score-badge-label">Resume Score</span>
+              <span className="score-badge-value">92%</span>
+              <span className="score-badge-sub">Good to go!</span>
+            </div>
+          </div>
+
+          {/* Bottom 4 Feature Highlights */}
+          <div className="home-hero-4features">
+            <div className="home-feature-item">
+              <div className="home-feat-icon icon-teal">
+                <Zap size={20} />
+              </div>
+              <div className="home-feat-text">
+                <h4>Quick & Easy</h4>
+                <p>Build your resume in just a few minutes.</p>
+              </div>
+            </div>
+
+            <div className="home-feature-item">
+              <div className="home-feat-icon icon-cyan">
+                <Target size={20} />
+              </div>
+              <div className="home-feat-text">
+                <h4>Tailored for You</h4>
+                <p>Custom suggestions that match your profile.</p>
+              </div>
+            </div>
+
+            <div className="home-feature-item">
+              <div className="home-feat-icon icon-blue">
+                <ShieldCheck size={20} />
+              </div>
+              <div className="home-feat-text">
+                <h4>ATS-Ready</h4>
+                <p>Designed to pass ATS and get you noticed.</p>
+              </div>
+            </div>
+
+            <div className="home-feature-item">
+              <div className="home-feat-icon icon-amber">
+                <Star size={20} />
+              </div>
+              <div className="home-feat-text">
+                <h4>Stand Out</h4>
+                <p>Showcase your strengths and achievements.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -478,38 +524,6 @@ export const LandingPage = () => {
           ))}
         </div>
       </section>
-
-      {/* 8. Footer Block */}
-      <footer id="brx-footer">
-        <div className="footer-container">
-          <div className="footer-top">
-            <div className="footer-col">
-              <h3>ResumeNova</h3>
-              <p className="footer-tagline">Intelligent AI Resume Builder & ATS Scanner</p>
-            </div>
-            <div className="footer-col">
-              <h4>Tools & Features</h4>
-              <ul>
-                <li><Link to="/templates">Resume Templates</Link></li>
-                <li><Link to="/job-analyzer">ATS Resume Checker</Link></li>
-                <li><Link to="/create-resume">Build Resume</Link></li>
-              </ul>
-            </div>
-            <div className="footer-col">
-              <h4>Account</h4>
-              <ul>
-                <li><Link to="/dashboard">Dashboard</Link></li>
-                <li><Link to="/login">Sign In</Link></li>
-                <li><Link to="/register">Create Account</Link></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} ResumeNova. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

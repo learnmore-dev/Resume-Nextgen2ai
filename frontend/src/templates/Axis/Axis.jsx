@@ -6,6 +6,7 @@ export const Axis = ({ resume }) => {
   const skills = resume?.skills || [];
   const exp = resume?.experience || [];
   const edu = resume?.education || [];
+  const projects = resume?.projects || [];
 
   return (
     <div className="axis-template">
@@ -36,6 +37,41 @@ export const Axis = ({ resume }) => {
                   </ul>
                 ) : (
                   <p style={{ fontSize: '11px', color: '#334155', margin: 0 }}>{item.raw_description}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {projects.length > 0 && (
+          <div style={{ marginBottom: '20px' }}>
+            <h3 className="axis-section-heading">Key Projects</h3>
+            {projects.map(proj => (
+              <div key={proj.id} style={{ marginBottom: '14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <div style={{ fontSize: '12px', fontWeight: '700', color: '#0F172A' }}>
+                    {proj.name}
+                    {proj.tech_stack && (
+                      <span style={{ fontWeight: 'normal', fontStyle: 'italic', color: '#64748B', marginLeft: '6px', fontSize: '11px' }}>
+                        | {Array.isArray(proj.tech_stack) ? proj.tech_stack.join(', ') : proj.tech_stack}
+                      </span>
+                    )}
+                    {proj.link && (
+                      <a href={proj.link} target="_blank" rel="noopener noreferrer" style={{ color: '#0F4652', marginLeft: '8px', textDecoration: 'underline', fontSize: '11px' }}>
+                        Link
+                      </a>
+                    )}
+                  </div>
+                  <div style={{ fontSize: '10px', color: '#64748B', fontStyle: 'italic' }}>
+                    {proj.date || (proj.name?.includes('E-Commerce') ? 'Jan 2026 – Feb 2026' : (proj.name?.includes('HR') ? 'Feb 2026 – Mar 2026' : ''))}
+                  </div>
+                </div>
+                {proj.bullets && proj.bullets.length > 0 ? (
+                  <ul style={{ paddingLeft: '16px', margin: '4px 0 0', fontSize: '11px', color: '#334155' }}>
+                    {proj.bullets.map((b, i) => <li key={i} style={{ marginBottom: '2px' }}>{b}</li>)}
+                  </ul>
+                ) : (
+                  <p style={{ fontSize: '11px', color: '#334155', margin: '4px 0 0' }}>{proj.description}</p>
                 )}
               </div>
             ))}

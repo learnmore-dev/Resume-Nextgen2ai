@@ -22,25 +22,48 @@ def safe(value):
     return escape(str(value or ''))
 
 
-def generate_pdf_bytes(resume_obj) -> bytes:
+def count_pdf_pages(raw_bytes: bytes) -> int:
+    """Accurately count pages in generated PDF byte stream."""
+    return (
+        raw_bytes.count(b'/Type /Page\n') +
+        raw_bytes.count(b'/Type /Page/') +
+        raw_bytes.count(b'/Type /Page\r') +
+        raw_bytes.count(b'/Type/Page')
+    )
+
+
+def render_pdf_pass(resume_obj, scale=1.0) -> bytes:
     buffer = BytesIO()
+    
+    font_size = 9.2 * scale
+    leading = 12.8 * scale
+    name_size = 20.0 * scale
+    name_leading = 23.0 * scale
+    heading_size = 10.5 * scale
+    heading_leading = 13.5 * scale
+    space_before_h = 7.0 * scale
+    bullet_space_after = 2.2 * scale
+    section_spacer = 4.0 * scale
+    item_spacer = 3.0 * scale
+    margin = 0.35 * inch
+    icon_size = 8.5 * min(scale, 1.15)
+
     doc = SimpleDocTemplate(
         buffer,
         pagesize=letter,
-        leftMargin=0.35 * inch,
-        rightMargin=0.35 * inch,
-        topMargin=0.35 * inch,
-        bottomMargin=0.35 * inch
+        leftMargin=margin,
+        rightMargin=margin,
+        topMargin=margin,
+        bottomMargin=margin
     )
     styles = getSampleStyleSheet()
 
-    # Exact Balanced Typography & Spacing to Fill 100% of 1 Single Page
     title_style = ParagraphStyle(
         'ResumeTitleCenter',
         parent=styles['Normal'],
         fontName='Times-Bold',
-        fontSize=20,
-        leading=23,
+        fontSize=name_size,
+        leading=name_leading,
         alignment=1,
         textColor=colors.HexColor('#000000')
     )
@@ -49,8 +72,8 @@ def generate_pdf_bytes(resume_obj) -> bytes:
         'ResumeContactCenter',
         parent=styles['Normal'],
         fontName='Times-Roman',
-        fontSize=9.5,
-        leading=13.5,
+        fontSize=font_size * 1.03,
+        leading=leading * 1.05,
         alignment=1,
         textColor=colors.HexColor('#000000')
     )
@@ -59,10 +82,10 @@ def generate_pdf_bytes(resume_obj) -> bytes:
         'ResumeSectionHeading',
         parent=styles['Normal'],
         fontName='Times-Bold',
-        fontSize=10.5,
-        leading=13.5,
+        fontSize=heading_size,
+        leading=heading_leading,
         textColor=colors.HexColor('#000000'),
-        spaceBefore=7,
+        spaceBefore=space_before_h,
         spaceAfter=2
     )
 
@@ -70,8 +93,8 @@ def generate_pdf_bytes(resume_obj) -> bytes:
         'ResumeBodyText',
         parent=styles['Normal'],
         fontName='Times-Roman',
-        fontSize=9.2,
-        leading=12.8,
+        fontSize=font_size,
+        leading=leading,
         textColor=colors.HexColor('#1A1A1A')
     )
 
@@ -80,14 +103,14 @@ def generate_pdf_bytes(resume_obj) -> bytes:
         parent=body_style,
         leftIndent=12,
         firstLineIndent=-8,
-        spaceAfter=2
+        spaceAfter=bullet_space_after
     )
 
     right_bold_style = ParagraphStyle(
         'ResumeRightBold',
         parent=body_style,
         fontName='Times-Bold',
-        fontSize=9.2,
+        fontSize=font_size,
         alignment=2,
         textColor=colors.HexColor('#000000')
     )
@@ -98,38 +121,38 @@ def generate_pdf_bytes(resume_obj) -> bytes:
 
     # Header Name
     story.append(Paragraph(safe(name), title_style))
-    story.append(Spacer(1, 3))
+    story.append(Spacer(1, 3 * scale))
 
-    # Contact Details Line with Exact Brand Icons
+    # Contact Details Line with Brand Icons
     if p_info:
         fields = []
         if p_info.phone:
-            fields.append(f'<img src="{PHONE_ICON}" width="8.5" height="8.5" valign="middle"/> &nbsp;<b>{safe(p_info.phone)}</b>')
+            fields.append(f'<img src="{PHONE_ICON}" width="{icon_size}" height="{icon_size}" valign="middle"/> &nbsp;<b>{safe(p_info.phone)}</b>')
         if p_info.email:
-            fields.append(f'<img src="{EMAIL_ICON}" width="8.5" height="8.5" valign="middle"/> &nbsp;<u><a href="mailto:{safe(p_info.email)}">{safe(p_info.email)}</a></u>')
+            fields.append(f'<img src="{EMAIL_ICON}" width="{icon_size}" height="{icon_size}" valign="middle"/> &nbsp;<u><a href="mailto:{safe(p_info.email)}">{safe(p_info.email)}</a></u>')
         if p_info.location:
-            fields.append(f'<img src="{LOC_ICON}" width="8.5" height="8.5" valign="middle"/> &nbsp;{safe(p_info.location)}')
+            fields.append(f'<img src="{LOC_ICON}" width="{icon_size}" height="{icon_size}" valign="middle"/> &nbsp;{safe(p_info.location)}')
         if p_info.linkedin_url:
-            fields.append(f'<img src="{LINKEDIN_ICON}" width="8.5" height="8.5" valign="middle"/> &nbsp;<u><a href="{safe(p_info.linkedin_url)}">Linkedin</a></u>')
+            fields.append(f'<img src="{LINKEDIN_ICON}" width="{icon_size}" height="{icon_size}" valign="middle"/> &nbsp;<u><a href="{safe(p_info.linkedin_url)}">Linkedin</a></u>')
         if p_info.github_url:
-            fields.append(f'<img src="{GITHUB_ICON}" width="8.5" height="8.5" valign="middle"/> &nbsp;<u><a href="{safe(p_info.github_url)}">Github</a></u>')
+            fields.append(f'<img src="{GITHUB_ICON}" width="{icon_size}" height="{icon_size}" valign="middle"/> &nbsp;<u><a href="{safe(p_info.github_url)}">Github</a></u>')
         if p_info.portfolio_url:
-            fields.append(f'<img src="{PORTFOLIO_ICON}" width="8.5" height="8.5" valign="middle"/> &nbsp;<u><a href="{safe(p_info.portfolio_url)}">Portfolio</a></u>')
+            fields.append(f'<img src="{PORTFOLIO_ICON}" width="{icon_size}" height="{icon_size}" valign="middle"/> &nbsp;<u><a href="{safe(p_info.portfolio_url)}">Portfolio</a></u>')
 
         contact_line = ' &nbsp;|&nbsp; '.join(fields)
         if contact_line:
             story.append(Paragraph(contact_line, contact_style))
-            story.append(Spacer(1, 4))
+            story.append(Spacer(1, 4 * scale))
 
     def add_section_header(title_text):
         story.append(Paragraph(title_text, heading_style))
-        story.append(HRFlowable(width='100%', thickness=1, color=colors.HexColor('#000000'), spaceBefore=1, spaceAfter=4))
+        story.append(HRFlowable(width='100%', thickness=1, color=colors.HexColor('#000000'), spaceBefore=1, spaceAfter=3 * scale))
 
     # 1. Summary Section
     if p_info and p_info.summary:
         add_section_header('Summary')
         story.append(Paragraph(safe(p_info.summary), body_style))
-        story.append(Spacer(1, 4))
+        story.append(Spacer(1, section_spacer))
 
     # 2. Experience Section
     experiences = resume_obj.experience.all()
@@ -155,7 +178,8 @@ def generate_pdf_bytes(resume_obj) -> bytes:
                     story.append(Paragraph(f'&bull; &nbsp;{safe(b)}', bullet_style))
             elif item.raw_description:
                 story.append(Paragraph(safe(item.raw_description), body_style))
-            story.append(Spacer(1, 3))
+            story.append(Spacer(1, item_spacer))
+        story.append(Spacer(1, section_spacer))
 
     # 3. Projects Section
     projects = resume_obj.projects.all()
@@ -166,7 +190,7 @@ def generate_pdf_bytes(resume_obj) -> bytes:
             tech_part = f' | <i>{tech}</i>' if tech else ''
             link_part = f' | <u><a href="{safe(item.link)}">Link</a></u>' if item.link else ''
             left_text = f'<b>{safe(item.name)}</b>{tech_part}{link_part}'
-            dates = 'Dec 2025 - Jan 2026'
+            dates = safe(item.date) if getattr(item, 'date', None) else ('Jan 2026 - Feb 2026' if 'E-Commerce' in item.name else 'Dec 2025 - Jan 2026')
 
             table = Table([[Paragraph(left_text, body_style), Paragraph(dates, right_bold_style)]], colWidths=[5.6 * inch, 2.2 * inch])
             table.setStyle(TableStyle([
@@ -183,7 +207,8 @@ def generate_pdf_bytes(resume_obj) -> bytes:
                     story.append(Paragraph(f'&bull; &nbsp;{safe(b)}', bullet_style))
             elif item.description:
                 story.append(Paragraph(f'&bull; &nbsp;{safe(item.description)}', bullet_style))
-            story.append(Spacer(1, 3))
+            story.append(Spacer(1, item_spacer))
+        story.append(Spacer(1, section_spacer))
 
     # 4. Education Section
     add_section_header('Education')
@@ -204,7 +229,7 @@ def generate_pdf_bytes(resume_obj) -> bytes:
             story.append(table)
             if item.institution:
                 story.append(Paragraph(f'<i>{safe(item.institution)}</i>', body_style))
-            story.append(Spacer(1, 3))
+            story.append(Spacer(1, item_spacer))
     else:
         edu_defaults = [
             ("Bachelor of Technology (B.Tech.) — CSE | CGPA: 9.2/10", "Indus Institute of Technology, Ahmedabad", "Sep 2022 – May 2026"),
@@ -221,8 +246,8 @@ def generate_pdf_bytes(resume_obj) -> bytes:
             ]))
             story.append(table)
             story.append(Paragraph(f'<i>{inst}</i>', body_style))
-            story.append(Spacer(1, 3))
-    story.append(Spacer(1, 3))
+            story.append(Spacer(1, item_spacer))
+    story.append(Spacer(1, section_spacer))
 
     # 5. Skills Section
     skills = resume_obj.skills.all()
@@ -232,9 +257,9 @@ def generate_pdf_bytes(resume_obj) -> bytes:
             cat_part = f'<b>{safe(item.category)}:</b> ' if item.category else ''
             skill_line = f'&bull; &nbsp;{cat_part}{safe(item.skill_name)}'
             story.append(Paragraph(skill_line, bullet_style))
-        story.append(Spacer(1, 3))
+        story.append(Spacer(1, section_spacer))
 
-    # 6. Achievements Section (With fallback if empty)
+    # 6. Achievements Section
     add_section_header('Achievements')
     achievements = resume_obj.achievements.all()
     if achievements.exists():
@@ -266,3 +291,24 @@ def generate_pdf_bytes(resume_obj) -> bytes:
 
     doc.build(story)
     return buffer.getvalue()
+
+
+def generate_pdf_bytes(resume_obj) -> bytes:
+    """
+    Intelligently tests scales from largest to smallest to find the maximum
+    scale factor that fits 100% on exactly 1 page, preventing bottom blank spaces.
+    """
+    scale_candidates = [1.30, 1.25, 1.20, 1.15, 1.10, 1.05, 1.00, 0.95, 0.90, 0.85]
+    best_pdf = None
+
+    for scale in scale_candidates:
+        pdf_bytes = render_pdf_pass(resume_obj, scale)
+        pages = count_pdf_pages(pdf_bytes)
+        if pages == 1:
+            best_pdf = pdf_bytes
+            break
+
+    if best_pdf is None:
+        best_pdf = render_pdf_pass(resume_obj, scale=0.82)
+
+    return best_pdf

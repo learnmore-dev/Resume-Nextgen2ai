@@ -13,12 +13,13 @@ export const Achiever = ({ resume }) => {
   ];
 
   return (
-    <div className="achiever-template" style={{ padding: '25px 35px', fontFamily: '"Times New Roman", Times, serif', color: '#1A1A1A', background: '#FFFFFF' }}>
-      {/* Header Name: ~20 pt Bold */}
-      <div style={{ textAlign: 'center', marginBottom: '14px' }}>
-        <h1 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 4px 0', fontFamily: '"Times New Roman", Times, serif' }}>
-          {pInfo.full_name || pInfo.name || resume?.title || 'Manisha Chauhan'}
-        </h1>
+    <div className="achiever-template" style={{ padding: '24px 32px', minHeight: 'auto', boxSizing: 'border-box', fontFamily: '"Times New Roman", Times, serif', color: '#1A1A1A', background: '#FFFFFF' }}>
+      <div>
+        {/* Header Name: ~20 pt Bold */}
+        <div style={{ textAlign: 'center', marginBottom: '14px' }}>
+          <h1 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 4px 0', fontFamily: '"Times New Roman", Times, serif' }}>
+            {pInfo.full_name || pInfo.name || resume?.title || 'Manisha Chauhan'}
+          </h1>
         {/* Contact details: ~9.5–10 pt */}
         <div style={{ fontSize: '12px', color: '#1A1A1A', display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', fontFamily: '"Times New Roman", Times, serif' }}>
           {(pInfo.phone) && <span><strong>{pInfo.phone}</strong></span>}
@@ -96,7 +97,7 @@ export const Achiever = ({ resume }) => {
                   )}
                 </div>
                 <div style={{ fontWeight: 'bold' }}>
-                  {proj.start_date ? `${proj.start_date} – ${proj.end_date}` : proj.duration || 'Dec 2025 – Jan 2026'}
+                  {proj.date || (proj.start_date ? `${proj.start_date} – ${proj.end_date}` : (proj.duration || (proj.name?.includes('E-Commerce') ? 'Jan 2026 – Feb 2026' : (proj.name?.includes('HR') ? 'Feb 2026 – Mar 2026' : ''))))}
                 </div>
               </div>
               {proj.bullets && proj.bullets.length > 0 ? (
@@ -164,21 +165,28 @@ export const Achiever = ({ resume }) => {
             Achievements
           </div>
           <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '11px', lineHeight: '1.5' }}>
-            {achievements.map((ach, idx) => (
-              <li key={idx} style={{ marginBottom: '3px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <div>
-                    {typeof ach === 'string' ? ach : (
-                      <><strong>{ach.title.split('for DevNest AI.')[0]}</strong>{ach.title.includes('for DevNest AI.') ? ' for DevNest AI.' : ''}</>
-                    )}
+            {achievements.map((ach, idx) => {
+              const text = typeof ach === 'string' ? ach : (ach?.title || ach?.description || ach?.name || '');
+              const date = typeof ach === 'object' ? ach?.date : '';
+              return (
+                <li key={idx} style={{ marginBottom: '3px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div>
+                      {text.includes('for DevNest AI.') ? (
+                        <><strong>{text.split('for DevNest AI.')[0]}</strong> for DevNest AI.</>
+                      ) : (
+                        <span>{text}</span>
+                      )}
+                    </div>
+                    {date && <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap', marginLeft: '10px' }}>{date}</div>}
                   </div>
-                  {ach.date && <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap', marginLeft: '10px' }}>{ach.date}</div>}
-                </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
+      </div>
     </div>
   );
 };

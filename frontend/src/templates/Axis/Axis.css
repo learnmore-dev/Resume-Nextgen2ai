@@ -1,6 +1,6 @@
 .axis-template {
   display: flex;
-  min-height: 800px;
+  min-height: auto;
   font-family: 'Inter', sans-serif;
   background-color: #FFFFFF;
   color: #1E293B;

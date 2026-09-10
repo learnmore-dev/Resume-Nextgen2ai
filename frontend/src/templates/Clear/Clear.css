@@ -3,7 +3,7 @@
   background-color: #FFFFFF;
   color: #0F172A;
   padding: 40px;
-  min-height: 800px;
+  min-height: auto;
 }
 
 .clear-header {
