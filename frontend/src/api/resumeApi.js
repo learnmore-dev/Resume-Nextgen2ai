@@ -1,72 +1,34 @@
 import axios from 'axios';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
-const client = axios.create({
+export const client = axios.create({
   baseURL: API_BASE,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-const ensureAuthToken = async () => {
-  let token = localStorage.getItem('access_token');
-  if (token) return token;
-  try {
-    const res = await axios.post(`${API_BASE}/auth/login/`, {
-      username: 'guest_user',
-      password: 'guestpass123'
-    });
-    localStorage.setItem('access_token', res.data.access);
-    localStorage.setItem('refresh_token', res.data.refresh);
-    localStorage.setItem('user_data', JSON.stringify({ username: 'guest_user', isGuest: true }));
-    return res.data.access;
-  } catch (err) {
-    try {
-      await axios.post(`${API_BASE}/auth/register/`, {
-        username: 'guest_user',
-        email: 'guest@nextgen2ai.com',
-        password: 'guestpass123'
-      });
-      const res = await axios.post(`${API_BASE}/auth/login/`, {
-        username: 'guest_user',
-        password: 'guestpass123'
-      });
-      localStorage.setItem('access_token', res.data.access);
-      localStorage.setItem('refresh_token', res.data.refresh);
-      return res.data.access;
-    } catch (e) {
-      console.error('Guest auth failed', e);
-      return null;
-    }
-  }
+export const contactApi = {
+  submitInquiry: (data) => client.post('/contact/', data)
 };
 
-// Interceptor to attach JWT token (auto-login if missing)
-client.interceptors.request.use(async (config) => {
-  let token = localStorage.getItem('access_token');
-  if (!token && !config.url.includes('/auth/')) {
-    token = await ensureAuthToken();
-  }
+// Interceptor to attach JWT token if present
+client.interceptors.request.use((config) => {
+  const token = localStorage.getItem('access_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// Interceptor to handle token refresh / re-login on 401
+// Interceptor to handle token refresh or 401
 client.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+  (error) => {
+    if (error.response?.status === 401) {
       localStorage.removeItem('access_token');
-      const token = await ensureAuthToken();
-      if (token) {
-        originalRequest.headers.Authorization = `Bearer ${token}`;
-        return client(originalRequest);
-      }
+      localStorage.removeItem('user_data');
     }
     return Promise.reject(error);
   }
@@ -75,6 +37,14 @@ client.interceptors.response.use(
 export const authApi = {
   login: (username, password) => client.post('/auth/login/', { username, password }),
   register: (userData) => client.post('/auth/register/', userData),
+  googleLogin: (data) => client.post('/auth/google/', data),
+  getGoogleConfig: () => client.get('/auth/google/config/'),
+  saveGoogleConfig: (clientId) => client.post('/auth/google/config/', { client_id: clientId })
+};
+
+export const adminApi = {
+  getOverview: () => client.get('/admin/overview/'),
+  getUsers: () => client.get('/admin/users/'),
 };
 
 export const resumeApi = {
@@ -133,7 +103,12 @@ export const resumeApi = {
     { responseType: 'blob' }
   ),
   exportJSONResume: (resumeId) => client.get(`/resumes/${resumeId}/export-json/`, { responseType: 'blob' }),
-  importJSONResume: (jsonData) => client.post('/resumes/import-json/', jsonData)
+  importJSONResume: (jsonData) => client.post('/resumes/import-json/', jsonData),
+
+  // Razorpay ₹29 PDF Payment & Verification
+  checkPaymentStatus: (resumeId) => client.get(`/resumes/${resumeId}/payment-status/`),
+  createRazorpayOrder: (resumeId) => client.post(`/resumes/${resumeId}/create-order/`),
+  verifyRazorpayPayment: (resumeId, payload) => client.post(`/resumes/${resumeId}/verify-payment/`, payload)
 };
 
 export default client;

@@ -4,61 +4,45 @@ import { authApi } from '../api/resumeApi';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  const initGuestUser = async () => {
-    const guestUser = { username: 'Guest User', isGuest: true };
-    try {
-      // Try logging in with default guest credentials
-      const res = await authApi.login('guest_user', 'guestpass123');
-      localStorage.setItem('access_token', res.data.access);
-      localStorage.setItem('refresh_token', res.data.refresh);
-      localStorage.setItem('user_data', JSON.stringify(guestUser));
-      setUser(guestUser);
-    } catch (e) {
-      // If login fails, try registering the guest user
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user_data');
+    if (savedUser) {
       try {
-        await authApi.register({
-          username: 'guest_user',
-          email: 'guest@resumatch.ai',
-          password: 'guestpass123'
-        });
-        const res = await authApi.login('guest_user', 'guestpass123');
+        const parsed = JSON.parse(savedUser);
+        if (parsed && !parsed.isGuest) return parsed;
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  });
+  const [loading, setLoading] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authRedirectPath, setAuthRedirectPath] = useState('/templates');
+
+  const loginWithGoogle = async (googlePayload) => {
+    setLoading(true);
+    try {
+      const res = await authApi.googleLogin(googlePayload);
+      if (res?.data?.access) {
         localStorage.setItem('access_token', res.data.access);
         localStorage.setItem('refresh_token', res.data.refresh);
-        localStorage.setItem('user_data', JSON.stringify(guestUser));
-        setUser(guestUser);
-      } catch (err) {
-        // Fallback session state if backend is offline or unreachable
-        setUser(guestUser);
+        const userData = res.data.user;
+        localStorage.setItem('user_data', JSON.stringify(userData));
+        setUser(userData);
+        return userData;
       }
+      throw new Error('Invalid authentication response from server');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    const savedUser = localStorage.getItem('user_data');
-    if (token && savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-        setLoading(false);
-      } catch (e) {
-        localStorage.removeItem('user_data');
-        initGuestUser();
-      }
-    } else {
-      initGuestUser();
-    }
-  }, []);
-
   const login = async (username, password) => {
     const res = await authApi.login(username, password);
     localStorage.setItem('access_token', res.data.access);
     localStorage.setItem('refresh_token', res.data.refresh);
-    const userData = { username };
+    const userData = res.data.user || { username, name: username, email: `${username}@nextgen.com` };
     localStorage.setItem('user_data', JSON.stringify(userData));
     setUser(userData);
     return res.data;
@@ -74,11 +58,35 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_data');
-    initGuestUser();
+    setUser(null);
   };
 
+  const openAuthModal = (redirectPath = '/templates') => {
+    setAuthRedirectPath(redirectPath);
+    setShowAuthModal(true);
+  };
+  const closeAuthModal = () => setShowAuthModal(false);
+
+  const isAuthenticated = Boolean(user && !user.isGuest);
+  const isAdmin = Boolean(
+    user && !user.isGuest && (user.isAdmin || user.is_staff || user.is_superuser)
+  );
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      isAuthenticated,
+      isAdmin,
+      showAuthModal,
+      authRedirectPath,
+      openAuthModal,
+      closeAuthModal,
+      loginWithGoogle, 
+      login, 
+      register, 
+      logout 
+    }}>
       {children}
     </AuthContext.Provider>
   );

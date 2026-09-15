@@ -4,7 +4,7 @@ from datetime import timedelta
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / '.env')
+load_dotenv(BASE_DIR / '.env', override=True)
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-ai-resume-builder-secret-key-2026')
 
@@ -99,3 +99,25 @@ SIMPLE_JWT = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    'https://nextgenresume.click',
+    'http://nextgenresume.click',
+    'https://*.nextgenresume.click',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:3003',
+    'http://127.0.0.1:3003',
+    'http://localhost:8093',
+    'http://127.0.0.1:8093',
+]
+
+# Razorpay Configuration (₹29 PDF Download)
+RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID', '')
+RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET', '')
+RAZORPAY_AMOUNT_PAISE = 2900  # ₹29.00
+
+# Google OAuth Configuration
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
+GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')
+
+

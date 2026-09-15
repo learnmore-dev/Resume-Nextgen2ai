@@ -6,34 +6,21 @@ import {
   FileText, Target, Layout, ShieldCheck, Zap, Download, Star,
   Check, Globe, Search, Award, TrendingUp, Layers, Briefcase, ExternalLink
 } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, openAuthModal } = useAuth();
   const { createResume, resumes } = useResume();
   const [activeFaq, setActiveFaq] = useState(null);
   const [creating, setCreating] = useState(false);
 
-  const handleStartBuilding = async () => {
-    if (!resumes || resumes.length === 0) {
-      navigate('/create-resume');
+  const handleStartBuilding = (targetPath = '/templates') => {
+    if (!isAuthenticated) {
+      openAuthModal(targetPath);
       return;
     }
-    setCreating(true);
-    try {
-      if (resumes && resumes.length > 0) {
-        navigate(`/builder/${resumes[0].id}`);
-      } else {
-        const newResume = await createResume({
-          title: 'My Professional Resume',
-          template_id: 1
-        });
-        navigate(`/builder/${newResume.id}`);
-      }
-    } catch (e) {
-      navigate('/dashboard');
-    } finally {
-      setCreating(false);
-    }
+    navigate(targetPath);
   };
 
   const toggleFaq = (index) => {
@@ -42,8 +29,8 @@ export const LandingPage = () => {
 
   const faqs = [
     {
-      q: "What is ResumeNova?",
-      a: "ResumeNova is an intelligent resume builder that uses advanced AI to help you create professional, ATS-friendly resumes in minutes. It analyzes your experience and suggests improvements to increase your chances of getting hired."
+      q: "What is NextGen Resume?",
+      a: "NextGen Resume is an intelligent resume builder that uses advanced AI to help you create professional, ATS-friendly resumes in minutes. It analyzes your experience and suggests improvements to increase your chances of getting hired."
     },
     {
       q: "How do I create a resume?",
@@ -54,7 +41,7 @@ export const LandingPage = () => {
       a: "Yes, absolutely. We prioritize data privacy and security. Your personal information is encrypted and stored securely. We do not share your data with third parties without your consent."
     },
     {
-      q: "Can I build a cover letter with ResumeNova?",
+      q: "Can I build a cover letter with NextGen Resume?",
       a: "Yes! Our tools include AI summary and cover letter generators that match your resume's design and craft compelling narratives tailored to target job descriptions."
     },
     {
@@ -132,7 +119,7 @@ export const LandingPage = () => {
               <h3 className="hero-center-card-title">Let’s build your winning resume!</h3>
               <p className="hero-center-card-subtitle">Get a free AI review and tips to improve your resume.</p>
 
-              <button onClick={() => navigate('/templates')} className="btn-home-hero-orange">
+              <button onClick={() => handleStartBuilding('/templates')} className="btn-home-hero-orange">
                 <span>Review My Resume</span>
                 <ArrowRight size={20} />
               </button>
@@ -412,7 +399,7 @@ export const LandingPage = () => {
 
             <div style={{ marginTop: '32px' }}>
               <button 
-                onClick={() => navigate('/templates')}
+                onClick={() => handleStartBuilding('/templates')}
                 className="btn-create-resume-white"
                 style={{ background: '#ee571d', color: '#fff' }}
               >
@@ -434,7 +421,7 @@ export const LandingPage = () => {
             Explore our library of professional samples, each crafted to help you land interviews. Gain proven insights to shape a winning application.
           </p>
           <button 
-            onClick={() => navigate('/templates')}
+            onClick={() => handleStartBuilding('/templates')}
             className="btn-cta"
           >
             <span>View All Templates & Examples</span>
@@ -524,6 +511,7 @@ export const LandingPage = () => {
           ))}
         </div>
       </section>
+
     </div>
   );
 };

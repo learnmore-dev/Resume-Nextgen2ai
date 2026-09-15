@@ -11,6 +11,7 @@ import { AchievementsForm } from './AchievementsForm';
 import { ResumePreview } from './ResumePreview';
 import { TemplateRenderer } from './templates/TemplateRenderer';
 import { ArrowLeft, Download, Target, Layout, Eye, X, User, Briefcase, GraduationCap, FolderGit2, Cpu, Award } from 'lucide-react';
+import { PaymentModal } from '../../components/PaymentModal';
 
 export const ResumeBuilder = () => {
   const { id } = useParams();
@@ -19,6 +20,7 @@ export const ResumeBuilder = () => {
   const [activeTab, setActiveTab] = useState('personal');
   const [downloading, setDownloading] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const [loadingResume, setLoadingResume] = useState(() => !activeResume || String(activeResume?.id) !== String(id));
   const [loadError, setLoadError] = useState(null);
@@ -61,7 +63,7 @@ export const ResumeBuilder = () => {
     fetchResumeDetail(id);
   };
 
-  const handleDownload = async () => {
+  const executeDownload = async () => {
     if (!activeResume) return;
     setDownloading(true);
     try {
@@ -76,9 +78,32 @@ export const ResumeBuilder = () => {
       URL.revokeObjectURL(fileUrl);
     } catch (error) {
       console.error('PDF export failed', error);
-      window.alert('PDF download failed. Please try again.');
+      if (error.response?.status === 402) {
+        setShowPaymentModal(true);
+      } else {
+        window.alert('PDF download failed. Please try again.');
+      }
     } finally {
       setDownloading(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (!activeResume) return;
+    setDownloading(true);
+    try {
+      // Check if user already paid ₹29 for this resume
+      const statusRes = await resumeApi.checkPaymentStatus(activeResume.id);
+      if (statusRes.data?.is_paid) {
+        await executeDownload();
+      } else {
+        setDownloading(false);
+        setShowPaymentModal(true);
+      }
+    } catch (err) {
+      console.warn('Payment check failed, opening checkout modal', err);
+      setDownloading(false);
+      setShowPaymentModal(true);
     }
   };
 
@@ -312,6 +337,18 @@ export const ResumeBuilder = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Razorpay ₹29 Payment Modal */}
+      {showPaymentModal && activeResume && (
+        <PaymentModal
+          isOpen={showPaymentModal}
+          onClose={() => setShowPaymentModal(false)}
+          resume={activeResume}
+          onPaymentSuccess={() => {
+            executeDownload();
+          }}
+        />
       )}
     </div>
   );

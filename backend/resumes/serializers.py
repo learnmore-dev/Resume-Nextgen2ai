@@ -1,10 +1,34 @@
+import os
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from .models import (
     Resume, PersonalInfo, Education, Experience,
     Project, Skill, Certification, Achievement, JobDescription,
     ATSAnalysis, Template
 )
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        user = self.user
+        admin_emails = [e.strip().lower() for e in os.getenv('ADMIN_EMAILS', '').split(',') if e.strip()]
+        is_admin = bool(user.is_staff or user.is_superuser or (user.email and user.email.lower() in admin_emails))
+        avatar = ''
+        if hasattr(user, 'profile') and user.profile.avatar_url:
+            avatar = user.profile.avatar_url
+
+        data['user'] = {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'name': f"{user.first_name} {user.last_name}".strip() or user.username,
+            'picture': avatar,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
+            'isAdmin': is_admin
+        }
+        return data
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

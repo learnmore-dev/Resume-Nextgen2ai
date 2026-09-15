@@ -1,17 +1,29 @@
+import os
 import re
 import json
+import time
+import uuid
+import hmac
+import hashlib
+import requests
+from dotenv import load_dotenv
+from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import status, permissions, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.utils import timezone
+from django.db.models import Sum, Count
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
 from .models import (
     Resume, PersonalInfo, Education, Experience,
     Project, Skill, Certification, Achievement, JobDescription,
-    ATSAnalysis, Template
+    ATSAnalysis, Template, ResumePayment, UserProfile
 )
 from .serializers import (
     RegisterSerializer, UserSerializer, ResumeListSerializer,
@@ -35,6 +47,131 @@ class RegisterView(APIView):
             user = serializer.save()
             return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def google_auth_view(request):
+    """
+    Authenticate a user via Google Sign-In credential or profile data.
+    Verifies token or provisions user account and returns JWT tokens.
+    """
+    credential = request.data.get('credential')
+    email = request.data.get('email')
+    name = request.data.get('name', '')
+    picture = request.data.get('picture', '')
+
+    # 1. If Google ID Token is supplied, verify via Google's tokeninfo API
+    if credential:
+        try:
+            res = requests.get(f"https://oauth2.googleapis.com/tokeninfo?id_token={credential}", timeout=8)
+            if res.status_code == 200:
+                google_info = res.json()
+                email = google_info.get('email') or email
+                name = google_info.get('name') or name or (email.split('@')[0] if email else '')
+                picture = google_info.get('picture') or picture
+            else:
+                if not email:
+                    return Response({'error': 'Invalid Google credential token'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            if not email:
+                return Response({'error': f'Google verification failed: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    if not email:
+        return Response({'error': 'Email address is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # 2. Get or create Django user by email
+    clean_email = email.strip().lower()
+    user = User.objects.filter(email__iexact=clean_email).first()
+    if not user:
+        user = User.objects.filter(username__iexact=clean_email).first()
+
+    if not user:
+        base_username = clean_email.split('@')[0].replace('.', '_')[:25]
+        cand_username = base_username
+        suffix = 1
+        while User.objects.filter(username=cand_username).exists():
+            cand_username = f"{base_username}_{suffix}"
+            suffix += 1
+            
+        first_name = name.split(' ')[0] if name else ''
+        last_name = ' '.join(name.split(' ')[1:]) if name and len(name.split(' ')) > 1 else ''
+        
+        user = User.objects.create_user(
+            username=cand_username,
+            email=clean_email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        user.set_unusable_password()
+        user.save()
+    else:
+        if name and not user.first_name:
+            user.first_name = name.split(' ')[0]
+            if len(name.split(' ')) > 1:
+                user.last_name = ' '.join(name.split(' ')[1:])
+
+    user.last_login = timezone.now()
+    user.save()
+
+    # Save or update UserProfile
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    if picture:
+        profile.avatar_url = picture
+        profile.save()
+    elif not profile.avatar_url:
+        profile.avatar_url = f"https://ui-avatars.com/api/?name={user.first_name or user.username}&background=4F46E5&color=fff&size=128"
+        profile.save()
+
+    # Check if user has admin privileges
+    admin_emails = [e.strip().lower() for e in os.getenv('ADMIN_EMAILS', '').split(',') if e.strip()]
+    is_admin = bool(user.is_staff or user.is_superuser or clean_email in admin_emails)
+    if is_admin and not user.is_staff:
+        user.is_staff = True
+        user.save()
+
+    # 3. Generate SimpleJWT tokens
+    refresh = RefreshToken.for_user(user)
+    display_name = f"{user.first_name} {user.last_name}".strip() or user.username
+    
+    return Response({
+        'access': str(refresh.access_token),
+        'refresh': str(refresh),
+        'user': {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email or clean_email,
+            'name': display_name,
+            'picture': profile.avatar_url or picture,
+            'isGoogleUser': True,
+            'is_staff': user.is_staff,
+            'is_superuser': user.is_superuser,
+            'isAdmin': is_admin
+        }
+    })
+
+@api_view(['GET', 'POST'])
+@permission_classes([permissions.AllowAny])
+def google_config_view(request):
+    """Get or update the active Google OAuth Client ID."""
+    if request.method == 'POST':
+        client_id = request.data.get('client_id', '').strip()
+        if client_id:
+            settings.GOOGLE_CLIENT_ID = client_id
+            env_path = settings.BASE_DIR / '.env'
+            if env_path.exists():
+                content = env_path.read_text(encoding='utf-8')
+                if 'GOOGLE_CLIENT_ID=' in content:
+                    new_content = re.sub(r'GOOGLE_CLIENT_ID=.*', f'GOOGLE_CLIENT_ID={client_id}', content)
+                else:
+                    new_content = content + f"\nGOOGLE_CLIENT_ID={client_id}\n"
+                env_path.write_text(new_content, encoding='utf-8')
+            return Response({'client_id': client_id, 'is_configured': True, 'saved': True})
+
+    client_id = getattr(settings, 'GOOGLE_CLIENT_ID', '').strip()
+    return Response({
+        'client_id': client_id,
+        'is_configured': bool(client_id)
+    })
 
 class ResumeViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
@@ -507,10 +644,173 @@ def list_templates(request):
     ]
     return Response(templates)
 
+def get_razorpay_creds():
+    load_dotenv(settings.BASE_DIR / '.env', override=True)
+    key_id = (os.getenv('RAZORPAY_KEY_ID') or getattr(settings, 'RAZORPAY_KEY_ID', '')).strip()
+    key_secret = (os.getenv('RAZORPAY_KEY_SECRET') or getattr(settings, 'RAZORPAY_KEY_SECRET', '')).strip()
+    return key_id, key_secret
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def check_payment_status(request, pk):
+    """Check whether ₹29 payment has been completed for this resume."""
+    resume = get_object_or_404(Resume, pk=pk, user=request.user)
+    is_paid = ResumePayment.objects.filter(resume=resume, status='paid').exists()
+    key_id, _ = get_razorpay_creds()
+    is_configured = bool(key_id and not key_id.startswith('rzp_test_placeholder'))
+    amount_paise = getattr(settings, 'RAZORPAY_AMOUNT_PAISE', 2900)
+    
+    return Response({
+        'resume_id': resume.id,
+        'is_paid': is_paid,
+        'amount': amount_paise / 100,
+        'amount_paise': amount_paise,
+        'currency': 'INR',
+        'key_id': key_id,
+        'is_configured': is_configured
+    })
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def create_razorpay_order(request, pk):
+    """Create a Razorpay order for ₹29 (2900 paise)."""
+    resume = get_object_or_404(Resume, pk=pk, user=request.user)
+    
+    # If already paid, inform client
+    if ResumePayment.objects.filter(resume=resume, status='paid').exists():
+        return Response({
+            'already_paid': True,
+            'message': 'This resume is already unlocked. You can download it directly.'
+        })
+        
+    amount = getattr(settings, 'RAZORPAY_AMOUNT_PAISE', 2900)
+    currency = 'INR'
+    key_id, key_secret = get_razorpay_creds()
+    
+    is_real_keys = bool(key_id and key_secret and not key_id.startswith('rzp_test_placeholder'))
+    order_id = None
+    
+    if is_real_keys:
+        try:
+            res = requests.post(
+                'https://api.razorpay.com/v1/orders',
+                auth=(key_id, key_secret),
+                json={
+                    'amount': amount,
+                    'currency': currency,
+                    'receipt': f"rcpt_res_{resume.id}_{int(time.time())}",
+                    'notes': {
+                        'resume_id': str(resume.id),
+                        'resume_title': resume.title,
+                        'user': request.user.username
+                    }
+                },
+                timeout=10
+            )
+            if res.status_code in [200, 201]:
+                order_data = res.json()
+                order_id = order_data.get('id')
+            else:
+                return Response({
+                    'error': 'Razorpay order creation failed',
+                    'details': res.text
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({
+                'error': f'Failed to connect to Razorpay: {str(e)}'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        # Development test order fallback when keys are in test mode
+        order_id = f"order_demo_{int(time.time())}_{uuid.uuid4().hex[:6]}"
+        
+    # Track order in database
+    payment = ResumePayment.objects.create(
+        user=request.user,
+        resume=resume,
+        razorpay_order_id=order_id,
+        amount=amount,
+        currency=currency,
+        status='created'
+    )
+    
+    return Response({
+        'order_id': order_id,
+        'amount': amount,
+        'currency': currency,
+        'key_id': key_id,
+        'is_demo_mode': not is_real_keys,
+        'resume_title': resume.title
+    })
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticated])
+def verify_razorpay_payment(request, pk):
+    """Verify Razorpay payment signature and unlock resume PDF."""
+    resume = get_object_or_404(Resume, pk=pk, user=request.user)
+    
+    order_id = request.data.get('razorpay_order_id')
+    payment_id = request.data.get('razorpay_payment_id', '')
+    signature = request.data.get('razorpay_signature', '')
+    
+    if not order_id:
+        return Response({'error': 'Missing razorpay_order_id'}, status=status.HTTP_400_BAD_REQUEST)
+        
+    payment = ResumePayment.objects.filter(resume=resume, razorpay_order_id=order_id).first()
+    if not payment:
+        payment = ResumePayment.objects.filter(razorpay_order_id=order_id).first()
+        if not payment:
+            return Response({'error': 'Order not found in records'}, status=status.HTTP_404_NOT_FOUND)
+            
+    _, key_secret = get_razorpay_creds()
+    is_demo = order_id.startswith('order_demo_') or not key_secret or key_secret.startswith('rzp_secret_placeholder')
+    
+    if not is_demo:
+        # Verify HMAC SHA256 signature
+        body = f"{order_id}|{payment_id}".encode('utf-8')
+        expected_signature = hmac.new(
+            key_secret.encode('utf-8'),
+            body,
+            hashlib.sha256
+        ).hexdigest()
+        
+        if not hmac.compare_digest(expected_signature, signature):
+            payment.status = 'failed'
+            payment.save()
+            return Response({'error': 'Signature verification failed. Payment cannot be verified.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Mark as paid
+    payment.razorpay_payment_id = payment_id or f"pay_demo_{uuid.uuid4().hex[:8]}"
+    payment.razorpay_signature = signature or 'demo_verified_sig'
+    payment.status = 'paid'
+    payment.save()
+    
+    return Response({
+        'success': True,
+        'message': 'Payment of ₹29 verified successfully! Resume PDF unlocked.',
+        'is_paid': True
+    })
+
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def export_pdf(request, pk):
     resume = get_object_or_404(Resume, pk=pk, user=request.user)
+    
+    # Check if payment is completed
+    is_paid = ResumePayment.objects.filter(resume=resume, status='paid').exists()
+    if not is_paid:
+        amount_paise = getattr(settings, 'RAZORPAY_AMOUNT_PAISE', 2900)
+        return HttpResponse(
+            json.dumps({
+                'error': 'Payment Required',
+                'message': 'Payment of ₹29 is required before downloading this resume.',
+                'requires_payment': True,
+                'amount': amount_paise / 100,
+                'resume_id': resume.id
+            }),
+            status=402,
+            content_type='application/json'
+        )
+
     template_id = request.query_params.get('template_id')
     if template_id:
         resume.template_id = int(template_id)
@@ -758,5 +1058,146 @@ def ai_autofill_role(request, pk):
         )
         
     return Response(ResumeDetailSerializer(resume).data)
+
+
+TEMPLATE_METADATA = {
+    1: {"name": "Modern Clean", "category": "General & Tech", "style": "Classic Single Column"},
+    2: {"name": "Minimalist Tech", "category": "Software & DevOps", "style": "Clean Dual Column"},
+    3: {"name": "Executive Elite", "category": "Leadership & Business", "style": "High-Impact Header"},
+    4: {"name": "Creative Impact", "category": "Design & Marketing", "style": "Modern Color Accent"},
+    5: {"name": "Compact Professional", "category": "Academic & Engineering", "style": "High-Density Single Column"},
+}
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def admin_overview_view(request):
+    """
+    Returns high-level statistics for Admin Dashboard:
+    Total registered users, total resumes created, total Razorpay revenue, and recent activity.
+    Restricted to admin/staff users only.
+    """
+    admin_emails = [e.strip().lower() for e in os.getenv('ADMIN_EMAILS', '').split(',') if e.strip()]
+    user_email = (request.user.email or '').strip().lower()
+    if not (request.user.is_staff or request.user.is_superuser or user_email in admin_emails):
+        return Response({'detail': 'Admin privileges required.'}, status=status.HTTP_403_FORBIDDEN)
+    total_users = User.objects.count()
+    total_resumes = Resume.objects.count()
+    
+    paid_payments = ResumePayment.objects.filter(status='paid')
+    total_paid_orders = paid_payments.count()
+    total_revenue_paise = paid_payments.aggregate(total=Sum('amount'))['total'] or 0
+    total_revenue_inr = round(total_revenue_paise / 100, 2)
+    
+    today_start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    today_signups = User.objects.filter(date_joined__gte=today_start).count()
+    today_resumes = Resume.objects.filter(created_at__gte=today_start).count()
+    
+    recent_users = []
+    for u in User.objects.order_by('-date_joined')[:5]:
+        avatar = ''
+        if hasattr(u, 'profile') and u.profile.avatar_url:
+            avatar = u.profile.avatar_url
+        else:
+            avatar = f"https://ui-avatars.com/api/?name={u.first_name or u.username}&background=4F46E5&color=fff&size=128"
+        recent_users.append({
+            'id': u.id,
+            'name': f"{u.first_name} {u.last_name}".strip() or u.username,
+            'email': u.email or f"{u.username}@example.com",
+            'avatar': avatar,
+            'date_joined': u.date_joined.isoformat(),
+            'resumes_count': u.resumes.count()
+        })
+
+    return Response({
+        'total_users': total_users,
+        'total_resumes': total_resumes,
+        'total_paid_orders': total_paid_orders,
+        'total_revenue_inr': total_revenue_inr,
+        'today_signups': today_signups,
+        'today_resumes': today_resumes,
+        'recent_users': recent_users
+    })
+
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def admin_users_view(request):
+    """
+    Returns full list of all registered users with their details and template creation history.
+    Restricted to admin/staff users only.
+    """
+    admin_emails = [e.strip().lower() for e in os.getenv('ADMIN_EMAILS', '').split(',') if e.strip()]
+    user_email = (request.user.email or '').strip().lower()
+    if not (request.user.is_staff or request.user.is_superuser or user_email in admin_emails):
+        return Response({'detail': 'Admin privileges required.'}, status=status.HTTP_403_FORBIDDEN)
+    users = User.objects.all().order_by('-date_joined')
+    result = []
+
+    for u in users:
+        avatar = ''
+        if hasattr(u, 'profile') and u.profile.avatar_url:
+            avatar = u.profile.avatar_url
+        else:
+            avatar = f"https://ui-avatars.com/api/?name={u.first_name or u.username}&background=4F46E5&color=fff&size=128"
+
+        user_resumes = []
+        for r in u.resumes.all().order_by('-created_at'):
+            template_meta = TEMPLATE_METADATA.get(r.template_id, {"name": f"Template #{r.template_id}", "category": "Standard"})
+            is_paid = ResumePayment.objects.filter(resume=r, status='paid').exists()
+            user_resumes.append({
+                'id': r.id,
+                'title': r.title or 'Untitled Resume',
+                'template_id': r.template_id,
+                'template_name': template_meta['name'],
+                'category': template_meta['category'],
+                'is_master': r.is_master,
+                'target_job_title': r.target_job_title or '',
+                'target_company': r.target_company or '',
+                'created_at': r.created_at.isoformat(),
+                'updated_at': r.updated_at.isoformat(),
+                'is_paid': is_paid
+            })
+
+        user_payments = ResumePayment.objects.filter(resume__user=u, status='paid')
+        paid_amount = sum(p.amount for p in user_payments) / 100
+
+        result.append({
+            'id': u.id,
+            'username': u.username,
+            'name': f"{u.first_name} {u.last_name}".strip() or u.username,
+            'email': u.email or f"{u.username}@example.com",
+            'avatar': avatar,
+            'date_joined': u.date_joined.isoformat(),
+            'last_login': u.last_login.isoformat() if u.last_login else None,
+            'resumes_count': len(user_resumes),
+            'resumes': user_resumes,
+            'total_paid_inr': paid_amount,
+            'is_staff': u.is_staff
+        })
+
+    return Response(result)
+
+
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
+def contact_submission_view(request):
+    """
+    Handle contact form inquiries from visitors and clients.
+    """
+    name = request.data.get('name', '').strip()
+    email = request.data.get('email', '').strip()
+    subject = request.data.get('subject', 'General Inquiry').strip()
+    message = request.data.get('message', '').strip()
+    category = request.data.get('category', 'Support').strip()
+
+    if not name or not email or not message:
+        return Response({'error': 'Name, email, and message are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({
+        'success': True,
+        'message': 'Thank you! Your inquiry has been received by the NextGen2AI team. We will reach out to you within 24 hours.',
+        'ticket_id': f"NXG-{int(time.time())}"
+    })
+
 
 

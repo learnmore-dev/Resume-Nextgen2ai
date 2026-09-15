@@ -1,84 +1,91 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Copy, Check, BookOpen, Filter, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, Copy, Check, BookOpen, Filter, ArrowRight, ShieldCheck, Briefcase, Award, Zap } from 'lucide-react';
 
 const IT_SUMMARY_DATA = [
   {
-    domain: 'Data Analytics',
-    icon: '📊',
-    experienceLevel: 'Fresher (0 Yrs)',
-    title: 'Data Analytics Fresher Summary',
-    text: 'Detail-oriented Data Analytics Fresher with strong foundations in Python, SQL, Advanced Excel, Power BI, and Exploratory Data Analysis (EDA). Skilled in data cleaning, data preprocessing, statistical modeling, and designing interactive dashboards to convert raw datasets into actionable business insights. Solved 100+ real-world analytical problems with a strong problem-solving mindset.'
+    domain: 'Artificial Intelligence & ML',
+    icon: '🤖',
+    experienceLevel: 'Senior / Lead (4-8 Yrs)',
+    title: 'Staff AI & LLM Systems Engineer',
+    text: 'Innovative Staff AI Engineer with 6+ years of experience architecting production-grade Large Language Model (LLM) pipelines, Retrieval-Augmented Generation (RAG) frameworks, and low-latency semantic search clusters. Proficient in PyTorch, LangChain, vector databases (Pinecone, Milvus), and fine-tuning open-source models (Llama, Mistral). Improved query precision by 42% while reducing token inference costs by 35% across enterprise workloads.'
   },
   {
-    domain: 'Data Analytics',
-    icon: '📊',
-    experienceLevel: '1-3 Years',
-    title: 'Junior Data Analyst Summary',
-    text: 'Results-driven Data Analyst with 2 years of experience in data modeling, SQL query optimization, ETL pipeline development, and executive Power BI dashboards. Adept at identifying revenue trends, customer segmentation, and automated KPI reporting to support strategic business decisions.'
+    domain: 'Artificial Intelligence & ML',
+    icon: '🤖',
+    experienceLevel: 'Associate (1-3 Yrs)',
+    title: 'AI / Machine Learning Engineer',
+    text: 'Results-driven Machine Learning Engineer with 2 years of experience developing predictive statistical models, NLP text classifiers, and computer vision algorithms. Skilled in Python, Scikit-learn, TensorFlow, FastAPI microservices, and Docker containerization. Successfully deployed 8 automated inference APIs handling 100,000+ daily requests with 99.9% uptime.'
   },
   {
-    domain: 'Data Analytics',
-    icon: '📊',
-    experienceLevel: '5+ Years',
-    title: 'Senior Data Analyst / BI Lead Summary',
-    text: 'Senior Data Analyst with 5+ years of experience leading cross-functional business intelligence initiatives, data warehousing architectures, and predictive analytics. Proven track record of improving reporting efficiency by 60% and delivering scalable analytics solutions for enterprise stakeholders.'
+    domain: 'Full Stack & Web Architecture',
+    icon: '💻',
+    experienceLevel: 'Lead / Principal (5+ Yrs)',
+    title: 'Principal Full Stack Solutions Architect',
+    text: 'High-impact Solutions Architect with 8+ years leading cross-functional engineering teams in designing distributed, cloud-native web platforms. Deep mastery of React.js, TypeScript, Node.js, Python/Django, and asynchronous event architectures using Apache Kafka and Redis. Directed the migration of monolithic legacy backends to microservices, unlocking 4x faster release velocity and zero downtime deployments.'
   },
   {
-    domain: 'Python Full Stack',
+    domain: 'Full Stack & Web Architecture',
     icon: '🐍',
-    experienceLevel: 'Fresher (0 Yrs)',
-    title: 'Python Full Stack Fresher Summary',
-    text: 'Enthusiastic Python Full Stack Developer with hands-on expertise in Python, Django, REST APIs, React.js, and PostgreSQL. Solved 400+ DSA problems with strong knowledge of OOPs and client-server architectures. Passionate about building robust, scalable web applications.'
+    experienceLevel: 'Mid-Level (2-4 Yrs)',
+    title: 'Senior Python Full Stack Engineer',
+    text: 'Versatile Python Full Stack Engineer with 3+ years of experience building secure, scalable RESTful microservices with Django and FastAPI alongside dynamic React.js frontends. Adept at PostgreSQL database schema design, query indexing, Docker orchestration, and automated CI/CD workflows in GitHub Actions. Reduced average API latency by 38% for high-volume endpoints.'
   },
   {
-    domain: 'Python Full Stack',
-    icon: '🐍',
-    experienceLevel: '1-3 Years',
-    title: 'Python Developer Summary',
-    text: 'Full Stack Python Developer with 2+ years of experience engineering secure RESTful microservices with Django / FastAPI and building dynamic React frontends. Proficient in database schema design with PostgreSQL, Docker containerization, and Git CI/CD workflows.'
-  },
-  {
-    domain: 'Java Full Stack',
-    icon: '☕',
-    experienceLevel: 'Fresher (0 Yrs)',
-    title: 'Java Full Stack Fresher Summary',
-    text: 'Motivated Java Full Stack Developer with solid fundamentals in Core Java, Collections, OOP, Data Structures & Algorithms, and Spring Boot. Hands-on experience developing REST APIs and modern React frontends. Solved 400+ DSA problems and eager to contribute to enterprise-scale applications.'
-  },
-  {
-    domain: 'Java Full Stack',
-    icon: '☕',
-    experienceLevel: '3-5 Years',
-    title: 'Java Full Stack Engineer Summary',
-    text: 'High-performing Java Full Stack Engineer with 4 years of experience architecting fault-tolerant microservices using Spring Boot, Spring Security, Kafka messaging, and React.js. Experienced in MySQL indexing, Hibernate JPA optimization, and cloud deployments.'
-  },
-  {
-    domain: 'MERN Stack',
+    domain: 'Full Stack & Web Architecture',
     icon: '⚛️',
-    experienceLevel: 'Fresher / Junior',
-    title: 'MERN Stack Developer Summary',
-    text: 'MERN Stack Developer with solid fundamentals in MongoDB, Express.js, React.js, and Node.js. Skilled in developing responsive user interfaces, designing RESTful APIs, and implementing secure JWT authentication. Passionate about full-stack web development.'
+    experienceLevel: 'Associate (1-3 Yrs)',
+    title: 'MERN Stack Software Engineer',
+    text: 'Proactive Full Stack Engineer proficient in MongoDB, Express.js, React.js, and Node.js. Experienced in designing responsive, accessibility-first component libraries, secure JWT/OAuth 2.0 authentication flows, and state management architectures with Redux Toolkit. Built and maintained 12+ production client web portals.'
   },
   {
-    domain: 'DevOps & Cloud',
+    domain: 'Java Enterprise & Microservices',
+    icon: '☕',
+    experienceLevel: 'Senior Engineer (4-7 Yrs)',
+    title: 'Senior Java Backend Microservices Engineer',
+    text: 'Senior Backend Engineer with 5 years of experience architecting fault-tolerant, high-throughput microservices using Java 21, Spring Boot 3, Spring Cloud, and Kafka messaging. Expert in database optimization with PostgreSQL/MySQL, Hibernate JPA caching, and resilience engineering with Resilience4j. Successfully handled 5,000+ peak RPS with sub-50ms response times.'
+  },
+  {
+    domain: 'Java Enterprise & Microservices',
+    icon: '☕',
+    experienceLevel: 'Associate (0-2 Yrs)',
+    title: 'Associate Java Software Engineer',
+    text: 'Motivated Java Developer with strong foundations in Core Java, Collections, Multithreading, OOP, and Spring Boot REST APIs. Hands-on experience developing modular microservices, writing JUnit unit tests, and integrating React frontends. Solved 450+ algorithmic challenges with a strong focus on clean code and performance.'
+  },
+  {
+    domain: 'Data Analytics & BI',
+    icon: '📊',
+    experienceLevel: 'Senior / Lead (5+ Yrs)',
+    title: 'Lead Data Analytics & BI Architect',
+    text: 'Strategic Business Intelligence Lead with 6+ years of experience managing enterprise data warehousing (Snowflake, BigQuery), ETL pipeline orchestration (Airflow, dbt), and executive Power BI/Tableau reporting. Partnered with C-suite stakeholders to identify revenue leakages, translating 50M+ customer event streams into ₹4.2Cr annual cost savings.'
+  },
+  {
+    domain: 'Data Analytics & BI',
+    icon: '📊',
+    experienceLevel: 'Associate (1-3 Yrs)',
+    title: 'Data Analyst & Quantitative Specialist',
+    text: 'Analytical Data Analyst with 2 years of experience in data modeling, SQL query optimization, Python statistical modeling, and Power BI dashboarding. Expert at synthesizing complex multi-source datasets into intuitive visual KPIs, streamlining monthly stakeholder reporting time by 55%.'
+  },
+  {
+    domain: 'Cloud Infrastructure & DevOps',
     icon: '☁️',
-    experienceLevel: '1-3 Years',
-    title: 'DevOps & Cloud Engineer Summary',
-    text: 'Automation-focused DevOps Engineer with hands-on expertise in Linux administration, Docker containerization, Kubernetes cluster management, CI/CD pipeline automation (GitHub Actions / Jenkins), and AWS cloud infrastructure provisioning with Terraform.'
+    experienceLevel: 'Senior / Lead (4-8 Yrs)',
+    title: 'Principal Cloud & DevOps Architect',
+    text: 'Seasoned Cloud Solutions Architect with 7 years of expertise architecting secure multi-region AWS environments, Kubernetes (EKS) clusters, and automated Terraform Infrastructure as Code (IaC). Certified AWS Solutions Architect Professional with a track record of cutting enterprise cloud expenditures by 32% while sustaining 99.995% service availability.'
   },
   {
-    domain: 'Cyber Security',
+    domain: 'Cybersecurity & Governance',
     icon: '🔒',
-    experienceLevel: 'Fresher / Associate',
-    title: 'SOC & Cyber Security Analyst Summary',
-    text: 'Dedicated Cyber Security Analyst with knowledge of SIEM tools (Splunk), network intrusion detection (Snort, Wireshark), vulnerability assessment (Nessus), and incident triage. Committed to safeguarding organizational digital assets following NIST security frameworks.'
+    experienceLevel: 'Senior / Specialist (3-6 Yrs)',
+    title: 'Enterprise Cybersecurity & SOC Specialist',
+    text: 'Cybersecurity Specialist experienced in SIEM monitoring (Splunk, Microsoft Sentinel), vulnerability assessment (Qualys, Nessus), and incident containment across cloud and hybrid environments. Instrumental in driving ISO 27001 and SOC 2 Type II compliance audits, remediating critical network attack vectors with zero data breach incidents.'
   },
   {
-    domain: 'QA Automation',
+    domain: 'QA & Test Automation',
     icon: '🧪',
-    experienceLevel: '1-3 Years',
-    title: 'QA Automation Engineer Summary',
-    text: 'Detail-oriented QA Automation Engineer skilled in Selenium WebDriver, Python / Java, PyTest, TestNG, and REST API verification with Postman. Experienced in building Page Object Model (POM) frameworks and integrating automated regression test suites into CI/CD pipelines.'
+    experienceLevel: 'Senior QA (3-6 Yrs)',
+    title: 'Lead QA Automation & SDET Architect',
+    text: 'Accomplished SDET with 5 years of experience building scalable test automation frameworks using Selenium WebDriver, Playwright, Python, and Java TestNG. Integrated continuous regression pipelines into GitHub Actions / Jenkins, expanding automated test coverage from 45% to 92% and reducing sprint deployment release cycles by 3 days.'
   }
 ];
 
@@ -87,7 +94,16 @@ export const ObjectivesSummaries = () => {
   const [selectedDomain, setSelectedDomain] = useState('All');
   const [copiedIndex, setCopiedIndex] = useState(null);
 
-  const domains = ['All', 'Data Analytics', 'Python Full Stack', 'Java Full Stack', 'MERN Stack', 'DevOps & Cloud', 'Cyber Security', 'QA Automation'];
+  const domains = [
+    'All', 
+    'Artificial Intelligence & ML', 
+    'Full Stack & Web Architecture', 
+    'Java Enterprise & Microservices', 
+    'Data Analytics & BI', 
+    'Cloud Infrastructure & DevOps', 
+    'Cybersecurity & Governance', 
+    'QA & Test Automation'
+  ];
 
   const filtered = IT_SUMMARY_DATA.filter(item => {
     if (selectedDomain === 'All') return true;
@@ -101,109 +117,199 @@ export const ObjectivesSummaries = () => {
   };
 
   return (
-    <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingBottom: '4rem' }}>
+    <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingBottom: '5rem' }}>
       {/* Hero Banner */}
-      <section className="templates-hero-banner" style={{ padding: '45px 24px 50px', marginBottom: '2rem' }}>
-        <div className="templates-hero-container" style={{ maxWidth: '900px' }}>
+      <section className="templates-hero-banner" style={{ padding: '50px 24px 55px', marginBottom: '2.5rem' }}>
+        <div className="templates-hero-container" style={{ maxWidth: '960px' }}>
           <div className="templates-breadcrumb" style={{ marginBottom: '14px' }}>
             <span onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>Home</span>
             <span className="sep">›</span>
-            <span className="active">Resume Objectives & Summaries</span>
+            <span className="active">Career Resources</span>
+            <span className="sep">›</span>
+            <span className="active">Professional Resume Summaries</span>
           </div>
 
-          <h1 className="templates-main-heading" style={{ fontSize: '2.8rem', marginBottom: '10px' }}>
-            Professional Resume <span className="highlight-noticed">Objectives & Summaries</span>
+          <h1 className="templates-main-heading" style={{ fontSize: '2.8rem', marginBottom: '12px' }}>
+            Enterprise-Grade <span className="highlight-noticed">Resume Summaries</span>
           </h1>
 
-          <p className="templates-hero-desc" style={{ fontSize: '1rem', maxWidth: '720px', margin: '0 auto 20px' }}>
-            Browse industry-proven, ATS-optimized professional summaries tailored for freshers, junior developers, and senior engineers across top IT domains. 1-Click Copy & Paste directly into your resume!
+          <p className="templates-hero-desc" style={{ fontSize: '1.05rem', maxWidth: '780px', margin: '0 auto 18px', lineHeight: 1.6 }}>
+            Curated, metrics-driven professional summaries tailored for associate engineers, senior tech leads, and solutions architects. Copy directly into your resume with 1 click!
           </p>
 
-          <div className="templates-trust-badges" style={{ margin: '0' }}>
-            <span className="trust-item"><Sparkles size={16} color="#38BDF8" /> 100% ATS Optimized</span>
-            <span className="trust-dot">•</span>
-            <span className="trust-item">1-Click Copy</span>
-            <span className="trust-dot">•</span>
-            <span className="trust-item">All IT Domains</span>
+          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.14)', padding: '5px 14px', borderRadius: '20px', color: '#E2E8F0', fontSize: '0.82rem' }}>
+              <ShieldCheck size={15} color="#34D399" /> 100% ATS Optimized
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.14)', padding: '5px 14px', borderRadius: '20px', color: '#E2E8F0', fontSize: '0.82rem' }}>
+              <Sparkles size={15} color="#FBBF24" /> Quantified Impact Metrics
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.14)', padding: '5px 14px', borderRadius: '20px', color: '#E2E8F0', fontSize: '0.82rem' }}>
+              <Award size={15} color="#38BDF8" /> 8 Tech Domains
+            </span>
           </div>
         </div>
       </section>
 
-      {/* Filter Tabs */}
-      <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '2rem', justifyContent: 'center' }}>
-          {domains.map(d => (
-            <button
-              key={d}
-              onClick={() => setSelectedDomain(d)}
-              style={{
-                padding: '7px 16px',
-                borderRadius: '20px',
-                border: '1.5px solid #CBD5E1',
-                background: selectedDomain === d ? '#2563EB' : '#FFFFFF',
-                color: selectedDomain === d ? '#FFFFFF' : '#334155',
-                fontSize: '0.85rem',
-                fontWeight: '700',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: selectedDomain === d ? '0 4px 12px rgba(37,99,235,0.25)' : 'none'
-              }}
-            >
-              {d}
-            </button>
-          ))}
+      {/* Main Content Area */}
+      <div style={{ maxWidth: '1160px', margin: '0 auto', padding: '0 1.5rem' }}>
+        
+        {/* Domain Filter Pills */}
+        <div style={{ marginBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '0.85rem', color: '#64748B', fontSize: '0.88rem', fontWeight: 700 }}>
+            <Filter size={16} /> Filter by Specialization:
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            {domains.map(domain => (
+              <button
+                key={domain}
+                onClick={() => setSelectedDomain(domain)}
+                style={{
+                  background: selectedDomain === domain ? '#0F172A' : '#FFFFFF',
+                  color: selectedDomain === domain ? '#FFFFFF' : '#475569',
+                  border: '1.5px solid',
+                  borderColor: selectedDomain === domain ? '#0F172A' : '#E2E8F0',
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  fontWeight: selectedDomain === domain ? 800 : 600,
+                  fontSize: '0.86rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                  boxShadow: selectedDomain === domain ? '0 2px 8px rgba(15,23,42,0.15)' : 'none'
+                }}
+              >
+                {domain}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Summaries Cards Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(480px, 1fr))', gap: '1.5rem' }}>
+        {/* Summaries Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem' }}>
           {filtered.map((item, idx) => (
-            <div key={idx} className="glass-card" style={{ background: '#FFFFFF', border: '1.5px solid #BFDBFE', borderRadius: '12px', padding: '1.5rem', boxShadow: '0 4px 15px rgba(37,99,235,0.06)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div
+              key={idx}
+              style={{
+                background: '#FFFFFF',
+                borderRadius: '20px',
+                border: '1px solid #E2E8F0',
+                padding: '1.75rem',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.02)',
+                position: 'relative'
+              }}
+            >
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                {/* Header info */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '1.25rem' }}>{item.icon}</span>
-                    <div>
-                      <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '800', color: '#0F172A' }}>{item.title}</h4>
-                      <span style={{ fontSize: '0.75rem', color: '#2563EB', fontWeight: '700' }}>{item.experienceLevel}</span>
-                    </div>
+                    <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
+                    <span style={{ background: '#EFF6FF', color: '#2563EB', padding: '3px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 700 }}>
+                      {item.domain}
+                    </span>
                   </div>
-                  <span style={{ fontSize: '0.72rem', background: '#EFF6FF', color: '#1E40AF', padding: '2px 8px', borderRadius: '4px', fontWeight: '700' }}>
-                    {item.domain}
+                  <span style={{ background: '#F1F5F9', color: '#475569', padding: '3px 10px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600 }}>
+                    {item.experienceLevel}
                   </span>
                 </div>
 
-                <p style={{ fontSize: '0.86rem', color: '#334155', lineHeight: '1.6', margin: '0 0 1rem', background: '#F8FAFC', padding: '1rem', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  "{item.text}"
-                </p>
+                <h3 style={{ margin: '0 0 0.85rem', fontSize: '1.18rem', fontWeight: 800, color: '#0F172A', lineHeight: 1.3 }}>
+                  {item.title}
+                </h3>
+
+                <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '12px', border: '1px solid #F1F5F9', marginBottom: '1.25rem' }}>
+                  <p style={{ margin: 0, fontSize: '0.89rem', color: '#334155', lineHeight: 1.6 }}>
+                    "{item.text}"
+                  </p>
+                </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', alignItems: 'center' }}>
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #F1F5F9', paddingTop: '1rem' }}>
                 <button
                   onClick={() => handleCopy(item.text, idx)}
-                  className="btn btn-secondary"
-                  style={{ fontSize: '0.82rem', padding: '0.45rem 0.9rem', display: 'inline-flex', alignItems: 'center', gap: '6px', fontWeight: '700' }}
+                  style={{
+                    background: copiedIndex === idx ? '#DCFCE7' : '#FFFFFF',
+                    color: copiedIndex === idx ? '#166534' : '#0F172A',
+                    border: '1.5px solid',
+                    borderColor: copiedIndex === idx ? '#86EFAC' : '#CBD5E1',
+                    borderRadius: '8px',
+                    padding: '7px 14px',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    transition: 'all 0.15s'
+                  }}
                 >
                   {copiedIndex === idx ? (
                     <>
-                      <Check size={14} color="#16A34A" /> Copied!
+                      <Check size={15} /> Copied!
                     </>
                   ) : (
                     <>
-                      <Copy size={14} /> Copy Summary
+                      <Copy size={15} /> Copy Summary
                     </>
                   )}
                 </button>
+
                 <button
                   onClick={() => navigate('/templates')}
-                  className="btn btn-primary"
-                  style={{ fontSize: '0.82rem', padding: '0.45rem 0.9rem', fontWeight: '700' }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#ee571d',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px'
+                  }}
                 >
-                  Use in Resume ↗
+                  <span>Use in Builder</span>
+                  <ArrowRight size={14} />
                 </button>
               </div>
+
             </div>
           ))}
         </div>
+
+        {/* Bottom Banner */}
+        <div style={{ marginTop: '3.5rem', textAlign: 'center', background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', borderRadius: '24px', padding: '3rem 2rem', color: '#FFFFFF', boxShadow: '0 10px 30px rgba(15,23,42,0.15)' }}>
+          <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: '0 0 0.75rem', color: '#FFFFFF' }}>
+            Need an AI Summary Tailored to Your Specific Resume?
+          </h2>
+          <p style={{ fontSize: '1rem', color: '#94A3B8', margin: '0 auto 1.75rem', maxWidth: '600px', lineHeight: 1.6 }}>
+            Our built-in AI will analyze your work experience bullets and instantly generate 3 custom executive summaries tailored to your target job role.
+          </p>
+          <button 
+            onClick={() => navigate('/templates')} 
+            style={{ 
+              padding: '14px 32px', 
+              fontSize: '1.05rem', 
+              fontWeight: 800, 
+              borderRadius: '10px', 
+              background: '#ee571d', 
+              color: '#FFFFFF', 
+              border: 'none', 
+              cursor: 'pointer', 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: '10px',
+              boxShadow: '0 4px 15px rgba(238,87,29,0.35)'
+            }}
+          >
+            <span>Create My Custom Resume</span>
+            <ArrowRight size={20} />
+          </button>
+        </div>
+
       </div>
     </div>
   );

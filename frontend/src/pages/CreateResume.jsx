@@ -26,7 +26,7 @@ export const CreateResume = () => {
   return (
     <div className="onboarding-page">
       <header className="onboarding-header">
-        <div className="onboarding-brand"><Sparkles size={24} /> ResumeNova</div>
+        <div className="onboarding-brand"><Sparkles size={24} /> NextGen Resume</div>
       </header>
       <main className="onboarding-content">
         <div className="onboarding-step">Step 1 of 2</div>

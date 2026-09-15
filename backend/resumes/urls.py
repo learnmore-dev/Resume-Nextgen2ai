@@ -11,17 +11,35 @@ from .views import (
     generate_summary, improve_bullets,
     create_job_description, analyze_ats, upload_and_analyze_pdf_ats, optimize_for_job,
     list_templates, export_pdf, export_json_resume, import_json_resume,
-    ai_autofill_role, get_sample_jds, get_ats_history
+    ai_autofill_role, get_sample_jds, get_ats_history,
+    check_payment_status, create_razorpay_order, verify_razorpay_payment,
+    google_auth_view, google_config_view,
+    admin_overview_view, admin_users_view,
+    contact_submission_view
 )
+
+from .serializers import CustomTokenObtainPairSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 router = DefaultRouter()
 router.register('resumes', ResumeViewSet, basename='resume')
 
 urlpatterns = [
+    # Contact Inquiry
+    path('contact/', contact_submission_view, name='contact-submit'),
+
     # Auth
     path('auth/register/', RegisterView.as_view(), name='auth-register'),
-    path('auth/login/', TokenObtainPairView.as_view(), name='auth-login'),
+    path('auth/login/', CustomTokenObtainPairView.as_view(), name='auth-login'),
     path('auth/refresh/', TokenRefreshView.as_view(), name='auth-refresh'),
+    path('auth/google/', google_auth_view, name='auth-google'),
+    path('auth/google/config/', google_config_view, name='auth-google-config'),
+    
+    # Admin Panel & User Data Store
+    path('admin/overview/', admin_overview_view, name='admin-overview'),
+    path('admin/users/', admin_users_view, name='admin-users'),
     
     # Nested Endpoints for Master Resume Details
     path('resumes/<int:pk>/personal-info/', personal_info_detail, name='personal-info'),
@@ -50,6 +68,11 @@ urlpatterns = [
     path('ats/sample-jds/', get_sample_jds, name='ats-sample-jds'),
     path('ats/history/', get_ats_history, name='ats-history'),
     
+    # Razorpay Payment Gateway (₹29 Resume PDF Unlock)
+    path('resumes/<int:pk>/payment-status/', check_payment_status, name='resume-payment-status'),
+    path('resumes/<int:pk>/create-order/', create_razorpay_order, name='resume-create-order'),
+    path('resumes/<int:pk>/verify-payment/', verify_razorpay_payment, name='resume-verify-payment'),
+
     # Templates & PDF / JSON Export / Import
     path('templates/', list_templates, name='list-templates'),
     path('resumes/<int:pk>/export-pdf/', export_pdf, name='export-pdf'),

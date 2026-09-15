@@ -31,11 +31,11 @@ export const Footer = () => {
           <div className="nextgen-footer-col">
             <h4 className="nextgen-footer-title">Quick Links</h4>
             <ul className="nextgen-footer-list">
-              <li><Link to="/templates">Latest Events</Link></li>
-              <li><Link to="/create-resume">Terms and conditions</Link></li>
-              <li><Link to="/job-analyzer">Privacy policy</Link></li>
-              <li><Link to="/dashboard">Career</Link></li>
-              <li><a href="mailto:office@nextgen2ai.com">Contact us</a></li>
+              <li><Link to="/news">Latest Events & News</Link></li>
+              <li><Link to="/terms">Terms and conditions</Link></li>
+              <li><Link to="/privacy">Privacy policy</Link></li>
+              <li><Link to="/careers">Career</Link></li>
+              <li><Link to="/contact">Contact us</Link></li>
             </ul>
           </div>
 
@@ -43,9 +43,9 @@ export const Footer = () => {
           <div className="nextgen-footer-col">
             <h4 className="nextgen-footer-title">Recent News</h4>
             <ul className="nextgen-footer-list nextgen-news-list">
-              <li><span>Meta debuts new generation of AI chip</span></li>
-              <li><span>OpenAI makes GPT-4 Turbo available</span></li>
-              <li><span>Microsoft AI security updates</span></li>
+              <li><Link to="/news#meta-chip">Meta debuts new generation of AI chip</Link></li>
+              <li><Link to="/news#openai-gpt4">OpenAI makes GPT-4 Turbo available</Link></li>
+              <li><Link to="/news#microsoft-security">Microsoft AI security updates</Link></li>
             </ul>
           </div>
 
