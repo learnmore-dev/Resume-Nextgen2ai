@@ -23,6 +23,7 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy').then(m => ({ de
 const ContactUs = lazy(() => import('./pages/ContactUs').then(m => ({ default: m.ContactUs })));
 const CareersPage = lazy(() => import('./pages/CareersPage').then(m => ({ default: m.CareersPage })));
 const NewsEventsPage = lazy(() => import('./pages/NewsEventsPage').then(m => ({ default: m.NewsEventsPage })));
+const SeoLandingPage = lazy(() => import('./pages/SeoLandingPage').then(m => ({ default: m.SeoLandingPage })));
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -57,6 +58,13 @@ export const App = () => {
                 <Routes>
                   {/* Public Landing Page */}
                   <Route path="/" element={<LandingPage />} />
+                  <Route path="/ats-resume-builder" element={<SeoLandingPage pageKey="ats" />} />
+                  <Route path="/resume-builder-for-freshers" element={<SeoLandingPage pageKey="freshers" />} />
+                  <Route path="/resume-templates" element={<SeoLandingPage pageKey="templates" />} />
+                  <Route path="/student-resume-builder" element={<SeoLandingPage pageKey="students" />} />
+                  <Route path="/resume-builder-for-experienced" element={<SeoLandingPage pageKey="experienced" />} />
+                  <Route path="/resume-examples" element={<SeoLandingPage pageKey="examples" />} />
+                  <Route path="/resume-maker-pdf" element={<SeoLandingPage pageKey="pdf" />} />
 
                   {/* Public Corporate & Legal Pages */}
                   <Route path="/terms" element={<TermsAndConditions />} />
