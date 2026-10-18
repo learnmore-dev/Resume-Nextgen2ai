@@ -1,0 +1,84 @@
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from .views import (
+    RegisterView, ResumeViewSet, personal_info_detail,
+    experience_list_create, experience_detail,
+    education_list_create, education_detail,
+    project_list_create, project_detail,
+    skill_list_create, skill_detail,
+    achievement_list_create, achievement_detail,
+    generate_summary, improve_bullets,
+    create_job_description, analyze_ats, upload_and_analyze_pdf_ats, optimize_for_job,
+    list_templates, export_pdf, export_json_resume, import_json_resume,
+    ai_autofill_role, get_sample_jds, get_ats_history,
+    check_payment_status, create_razorpay_order, verify_razorpay_payment,
+    google_auth_view, google_config_view,
+    admin_overview_view, admin_users_view,
+    contact_submission_view
+)
+
+from .serializers import CustomTokenObtainPairSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+router = DefaultRouter()
+router.register('resumes', ResumeViewSet, basename='resume')
+
+urlpatterns = [
+    # Contact Inquiry
+    path('contact/', contact_submission_view, name='contact-submit'),
+
+    # Auth
+    path('auth/register/', RegisterView.as_view(), name='auth-register'),
+    path('auth/login/', CustomTokenObtainPairView.as_view(), name='auth-login'),
+    path('auth/refresh/', TokenRefreshView.as_view(), name='auth-refresh'),
+    path('auth/google/', google_auth_view, name='auth-google'),
+    path('auth/google/config/', google_config_view, name='auth-google-config'),
+    
+    # Admin Panel & User Data Store
+    path('admin/overview/', admin_overview_view, name='admin-overview'),
+    path('admin/users/', admin_users_view, name='admin-users'),
+    
+    # Nested Endpoints for Master Resume Details
+    path('resumes/<int:pk>/personal-info/', personal_info_detail, name='personal-info'),
+    path('resumes/<int:pk>/experience/', experience_list_create, name='experience-list'),
+    path('resumes/<int:pk>/experience/<int:exp_pk>/', experience_detail, name='experience-detail'),
+    path('resumes/<int:pk>/education/', education_list_create, name='education-list'),
+    path('resumes/<int:pk>/education/<int:edu_pk>/', education_detail, name='education-detail'),
+    path('resumes/<int:pk>/projects/', project_list_create, name='project-list'),
+    path('resumes/<int:pk>/projects/<int:proj_pk>/', project_detail, name='project-detail'),
+    path('resumes/<int:pk>/skills/', skill_list_create, name='skill-list'),
+    path('resumes/<int:pk>/skills/<int:skill_pk>/', skill_detail, name='skill-detail'),
+    path('resumes/<int:pk>/achievements/', achievement_list_create, name='achievement-list'),
+    path('resumes/<int:pk>/achievements/<int:ach_pk>/', achievement_detail, name='achievement-detail'),
+    
+    # AI Engine Hooks
+    path('resumes/<int:pk>/generate-summary/', generate_summary, name='generate-summary'),
+    path('resumes/<int:pk>/improve-bullets/', improve_bullets, name='improve-bullets'),
+    path('resumes/<int:pk>/optimize-for-job/', optimize_for_job, name='optimize-for-job'),
+    path('resumes/<int:pk>/ai-autofill/', ai_autofill_role, name='ai-autofill-role'),
+
+    # Job Description & ATS Analysis
+    path('job-descriptions/', create_job_description, name='job-description-create'),
+    path('ats/analyze/', analyze_ats, name='ats-analyze'),
+    path('ats/upload-pdf/', upload_and_analyze_pdf_ats, name='ats-upload-pdf'),
+    path('ats/upload-and-analyze/', upload_and_analyze_pdf_ats, name='ats-upload-and-analyze'),
+    path('ats/sample-jds/', get_sample_jds, name='ats-sample-jds'),
+    path('ats/history/', get_ats_history, name='ats-history'),
+    
+    # Razorpay Payment Gateway (₹29 Resume PDF Unlock)
+    path('resumes/<int:pk>/payment-status/', check_payment_status, name='resume-payment-status'),
+    path('resumes/<int:pk>/create-order/', create_razorpay_order, name='resume-create-order'),
+    path('resumes/<int:pk>/verify-payment/', verify_razorpay_payment, name='resume-verify-payment'),
+
+    # Templates & PDF / JSON Export / Import
+    path('templates/', list_templates, name='list-templates'),
+    path('resumes/<int:pk>/export-pdf/', export_pdf, name='export-pdf'),
+    path('resumes/<int:pk>/export-json/', export_json_resume, name='export-json-resume'),
+    path('resumes/import-json/', import_json_resume, name='import-json-resume'),
+    
+    path('', include(router.urls)),
+]
+

@@ -1,0 +1,46 @@
+.borderless-template {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: #FFFFFF;
+  color: #1E293B;
+  min-height: 800px;
+}
+
+.borderless-header {
+  background-color: #F7F2EE;
+  padding: 36px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px solid #E5DEDA;
+}
+
+.borderless-name {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1E293B;
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.borderless-sub {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.borderless-body {
+  padding: 32px 40px;
+}
+
+.borderless-skill-pill {
+  font-size: 11px;
+  background-color: #F1F5F9;
+  color: #334155;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+}
