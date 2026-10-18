@@ -36,13 +36,28 @@ export const Footer = () => {
               <li><Link to="/privacy">Privacy policy</Link></li>
               <li><Link to="/careers">Career</Link></li>
               <li><Link to="/contact">Contact us</Link></li>
-              <li><Link to="/ats-resume-builder">ATS Friendly Resume Builder</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Resume Tools */}
+          <div className="nextgen-footer-col">
+            <h4 className="nextgen-footer-title">Resume Tools</h4>
+            <ul className="nextgen-footer-list">
+              <li><Link to="/free-resume-builder">Free Resume Builder</Link></li>
+              <li><Link to="/ats-resume-builder">ATS Friendly Resume Template</Link></li>
+              <li><Link to="/professional-resume-builder">Professional Resume Builder</Link></li>
+              <li><Link to="/ai-resume-builder">Best AI Resume Builder</Link></li>
+              <li><Link to="/free-resume-templates">Free Resume Templates</Link></li>
+              <li><Link to="/resume-builder-pdf">Resume Builder PDF</Link></li>
+              <li><Link to="/resume-builder-microsoft-word">Microsoft Word Resume</Link></li>
+              <li><Link to="/google-docs-resume-templates">Google Docs Templates</Link></li>
               <li><Link to="/resume-builder-for-freshers">Resume Builder for Freshers</Link></li>
-              <li><Link to="/resume-templates">Free Resume Templates</Link></li>
               <li><Link to="/student-resume-builder">Resume Builder for Students</Link></li>
-              <li><Link to="/resume-builder-for-experienced">Resume Builder for Experienced Professionals</Link></li>
+              <li><Link to="/resume-builder-for-experienced">Resume for Experienced</Link></li>
               <li><Link to="/resume-examples">Resume Examples</Link></li>
-              <li><Link to="/resume-maker-pdf">Resume Maker PDF</Link></li>
+              <li><Link to="/create-resume-online-free">Create Resume Online Free</Link></li>
+              <li><Link to="/edit-resume-online">Edit Resume Online Free</Link></li>
+              <li><Link to="/kickresume-alternative">Kickresume Alternative</Link></li>
             </ul>
           </div>
 

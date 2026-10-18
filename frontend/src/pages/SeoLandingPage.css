@@ -260,16 +260,28 @@
   margin-top: 1.4rem;
 }
 
-.seo-related-links a {
+.seo-related-links a,
+.seo-related-link-btn {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.8rem 0;
+  border: none;
   border-bottom: 1px solid #e8ebf0;
+  background: none;
   color: #344158;
+  font: inherit;
   font-weight: 600;
   text-decoration: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.seo-related-link-btn:hover,
+.seo-related-links a:hover {
+  color: #d94417;
 }
 
 .seo-related-links svg {

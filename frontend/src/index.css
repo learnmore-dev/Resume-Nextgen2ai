@@ -3875,3 +3875,59 @@ textarea.form-control {
     border-radius: 8px !important;
   }
 }
+
+
+/* ── SEO Keywords Section (Landing Page) ───────────────────────────── */
+.seo-keywords-block {
+  padding: 3.5rem 1.5rem;
+  background: #f7f8fb;
+}
+
+.seo-keywords-inner {
+  width: min(100%, 1080px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.seo-keywords-title {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  font-weight: 800;
+  color: #172033;
+  margin-bottom: 0.5rem;
+}
+
+.seo-keywords-desc {
+  color: #64748b;
+  font-size: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.seo-keywords-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: center;
+}
+
+.seo-keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.1rem;
+  border: 1.5px solid #dde3ef;
+  border-radius: 999px;
+  background: #fff;
+  color: #344158;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, color 0.18s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.seo-keyword-chip:hover {
+  background: #ee571d;
+  border-color: #ee571d;
+  color: #fff;
+  transform: translateY(-1px);
+}

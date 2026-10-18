@@ -58,13 +58,27 @@ export const App = () => {
                 <Routes>
                   {/* Public Landing Page */}
                   <Route path="/" element={<LandingPage />} />
+                  {/* SEO Landing Pages — keyword-targeted routes */}
                   <Route path="/ats-resume-builder" element={<SeoLandingPage pageKey="ats" />} />
                   <Route path="/resume-builder-for-freshers" element={<SeoLandingPage pageKey="freshers" />} />
+                  <Route path="/free-resume-templates" element={<SeoLandingPage pageKey="templates" />} />
+                  {/* legacy redirect for old /resume-templates path */}
                   <Route path="/resume-templates" element={<SeoLandingPage pageKey="templates" />} />
                   <Route path="/student-resume-builder" element={<SeoLandingPage pageKey="students" />} />
                   <Route path="/resume-builder-for-experienced" element={<SeoLandingPage pageKey="experienced" />} />
                   <Route path="/resume-examples" element={<SeoLandingPage pageKey="examples" />} />
+                  <Route path="/resume-builder-pdf" element={<SeoLandingPage pageKey="pdf" />} />
                   <Route path="/resume-maker-pdf" element={<SeoLandingPage pageKey="pdf" />} />
+                  <Route path="/professional-resume-builder" element={<SeoLandingPage pageKey="professional" />} />
+                  <Route path="/free-resume-builder" element={<SeoLandingPage pageKey="nopay" />} />
+                  <Route path="/resume-builder-no-pay" element={<SeoLandingPage pageKey="nopay" />} />
+                  <Route path="/resume-builder-microsoft-word" element={<SeoLandingPage pageKey="word" />} />
+                  <Route path="/google-docs-resume-templates" element={<SeoLandingPage pageKey="googledocs" />} />
+                  <Route path="/ai-resume-builder" element={<SeoLandingPage pageKey="ai" />} />
+                  <Route path="/best-ai-resume-builder" element={<SeoLandingPage pageKey="ai" />} />
+                  <Route path="/create-resume-online-free" element={<SeoLandingPage pageKey="createonline" />} />
+                  <Route path="/edit-resume-online" element={<SeoLandingPage pageKey="editresume" />} />
+                  <Route path="/kickresume-alternative" element={<SeoLandingPage pageKey="kickresume" />} />
 
                   {/* Public Corporate & Legal Pages */}
                   <Route path="/terms" element={<TermsAndConditions />} />

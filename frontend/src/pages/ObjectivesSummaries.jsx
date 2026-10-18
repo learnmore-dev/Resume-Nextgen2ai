@@ -117,6 +117,7 @@ export const ObjectivesSummaries = () => {
   };
 
   return (
+    <>
     <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingBottom: '5rem' }}>
       {/* Hero Banner */}
       <section className="templates-hero-banner" style={{ padding: '50px 24px 55px', marginBottom: '2.5rem' }}>
@@ -312,6 +313,148 @@ export const ObjectivesSummaries = () => {
 
       </div>
     </div>
+
+    {/* SEO Content Section */}
+    <section style={{ background: '#f7f8fb', padding: '4rem 1.5rem' }}>
+      <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+        <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2.1rem)', fontWeight: 800, color: '#172033', marginBottom: '1rem' }}>
+          How to Write a Professional Resume Summary or Objective
+        </h2>
+        <p style={{ color: '#58657a', lineHeight: 1.8, marginBottom: '2rem', maxWidth: '780px' }}>
+          Your resume summary is the first thing a recruiter reads. It needs to communicate your role, your most relevant experience, and the value you bring — in three sentences or fewer. This guide covers resume summaries for every IT domain, from AI and machine learning to full stack, DevOps, cybersecurity, and product leadership.
+        </p>
+
+        {/* Stats Strip */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            { v:'80%', l:'Recruiters spend more time on resumes with a strong professional summary' },
+            { v:'30 sec', l:'Time a recruiter spends on your summary before deciding to read further' },
+            { v:'3×', l:'More callbacks when the summary directly mirrors the job title in the posting' },
+            { v:'6 lines', l:'Maximum recommended length for any professional resume summary' },
+          ].map(s => (
+            <div key={s.l} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.25rem', textAlign:'center' }}>
+              <div style={{ fontSize:'2rem', fontWeight:900, color:'#ee571d' }}>{s.v}</div>
+              <div style={{ fontSize:'0.83rem', color:'#58657a', marginTop:'0.35rem', lineHeight:1.5 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Before vs After */}
+        <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>Before vs After — Weak to Strong Summaries</h2>
+        <p style={{ color:'#58657a', lineHeight:1.8, marginBottom:'1.5rem', maxWidth:'780px' }}>See the exact difference between a summary that gets ignored and one that gets you an interview. The only difference is specificity, numbers, and relevance.</p>
+        <div style={{ display:'grid', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            {
+              role:'Software Engineer',
+              weak:'Experienced software developer with good knowledge of various technologies. Looking for a challenging role where I can utilise my skills and grow.',
+              strong:'Full Stack Engineer with 4 years building React and Node.js applications for fintech platforms. Reduced API response time by 38% and shipped 12 features that served 200,000+ active users.'
+            },
+            {
+              role:'Data Analyst',
+              weak:'Passionate data professional with experience in data analysis and reporting tools. Eager to contribute to a data-driven team.',
+              strong:'Data Analyst with 3 years turning raw business data into actionable insights using Python, SQL, and Power BI. Automated 14 weekly reports, saving 18 analyst hours per week across the finance team.'
+            },
+            {
+              role:'Fresher / Recent Graduate',
+              weak:'Recent engineering graduate looking for an entry-level position to begin my career and learn from experienced professionals.',
+              strong:'Computer Science graduate (CGPA 8.7) with hands-on experience in machine learning through 2 internships. Built a sentiment analysis model achieving 91% accuracy; proficient in Python, TensorFlow, and SQL.'
+            },
+          ].map(({ role, weak, strong }) => (
+            <div key={role} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.35rem' }}>
+              <div style={{ fontSize:'0.75rem', fontWeight:800, color:'#7c3aed', textTransform:'uppercase', marginBottom:'0.6rem' }}>{role}</div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem' }}>
+                <div style={{ background:'#fef2f2', borderRadius:'8px', padding:'0.9rem' }}>
+                  <div style={{ fontSize:'0.72rem', fontWeight:800, color:'#dc2626', marginBottom:'0.4rem' }}>✗ WEAK SUMMARY</div>
+                  <p style={{ fontSize:'0.88rem', color:'#374151', lineHeight:1.6, margin:0, fontStyle:'italic' }}>"{weak}"</p>
+                </div>
+                <div style={{ background:'#f0fdf4', borderRadius:'8px', padding:'0.9rem' }}>
+                  <div style={{ fontSize:'0.72rem', fontWeight:800, color:'#16a34a', marginBottom:'0.4rem' }}>✓ STRONG SUMMARY</div>
+                  <p style={{ fontSize:'0.88rem', color:'#374151', lineHeight:1.6, margin:0, fontStyle:'italic' }}>"{strong}"</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Summary by Career Stage */}
+        <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>Resume Summary by Career Stage</h2>
+        <p style={{ color:'#58657a', lineHeight:1.8, marginBottom:'1.5rem', maxWidth:'780px' }}>What you lead with in your summary changes entirely based on where you are in your career. Here is the right formula for each stage.</p>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            { stage:'🎓 Fresher / 0–1 Year', formula:'Degree + CGPA + internship/project + tools used + target role', example:'B.Tech Computer Science graduate (CGPA 8.4) with 2 internships in Python-based ML projects. Built a real-time object detection system using OpenCV and YOLOv5 with 89% accuracy. Seeking a junior ML Engineer role.' },
+            { stage:'📈 Mid-Level / 2–5 Years', formula:'Role + years + top achievement + stack + current scope', example:'Backend Engineer with 3 years building microservices at scale. Architected a payment gateway processing 500K daily transactions with 99.98% uptime using Node.js, PostgreSQL, and AWS. Seeking senior backend roles in fintech.' },
+            { stage:'🏆 Senior / 6–10 Years', formula:'Role + years + team/scope + 2 quantified achievements + leadership', example:'Senior Data Engineer with 7 years designing enterprise-grade data pipelines. Led a team of 6 to migrate 4TB of legacy data to a lakehouse architecture, cutting query costs by 42% and enabling real-time analytics for 3 business units.' },
+            { stage:'🔄 Career Changer', formula:'Transferable skills + relevant achievement + new direction + motivation', example:'Marketing Manager with 6 years in digital analytics transitioning to Data Science. Completed Google Data Analytics certification; built 3 end-to-end ML projects in Python. Seeking a junior Data Analyst role to apply analytical skills in a technical environment.' },
+          ].map(({ stage, formula, example }) => (
+            <div key={stage} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.35rem' }}>
+              <h3 style={{ fontSize:'0.97rem', fontWeight:800, color:'#172033', marginBottom:'0.5rem' }}>{stage}</h3>
+              <div style={{ fontSize:'0.78rem', fontWeight:700, color:'#ee571d', marginBottom:'0.4rem' }}>FORMULA</div>
+              <p style={{ fontSize:'0.83rem', color:'#58657a', marginBottom:'0.65rem', lineHeight:1.5 }}>{formula}</p>
+              <div style={{ fontSize:'0.78rem', fontWeight:700, color:'#0d9488', marginBottom:'0.4rem' }}>EXAMPLE</div>
+              <p style={{ fontSize:'0.83rem', color:'#374151', fontStyle:'italic', lineHeight:1.6, margin:0 }}>"{example}"</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Keywords by Domain */}
+        <div style={{ background:'#192337', borderRadius:'16px', padding:'2rem', marginBottom:'2.5rem', color:'#fff' }}>
+          <h2 style={{ fontSize:'1.4rem', fontWeight:800, margin:'0 0 0.5rem', color:'#fff' }}>Power Keywords to Include in Your Summary by Domain</h2>
+          <p style={{ color:'#94a3b8', lineHeight:1.7, marginBottom:'1.25rem', maxWidth:'700px' }}>Use these domain-specific keywords in your summary to immediately signal expertise and pass ATS filters for your target role.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:'1rem' }}>
+            {[
+              { dom:'AI & Machine Learning', kw:'LLM · RAG · PyTorch · TensorFlow · LangChain · Fine-tuning · MLOps · Vector DB · NLP · Computer Vision' },
+              { dom:'Full Stack / Web', kw:'React · Node.js · REST APIs · Microservices · TypeScript · PostgreSQL · Redis · CI/CD · Docker · AWS' },
+              { dom:'DevOps & Cloud', kw:'Kubernetes · Terraform · AWS · GCP · Azure · Jenkins · GitLab CI · Prometheus · Ansible · SRE' },
+              { dom:'Data Engineering', kw:'Spark · Kafka · Airflow · dbt · Snowflake · BigQuery · ETL · Data Lakehouse · SQL · Python' },
+              { dom:'Product Management', kw:'Product Strategy · OKRs · Roadmapping · A/B Testing · User Research · Agile · Stakeholder Management · GTM' },
+              { dom:'Cybersecurity', kw:'SIEM · Penetration Testing · SOC · ISO 27001 · OWASP · Zero Trust · IAM · Threat Modelling · GDPR · Incident Response' },
+            ].map(({ dom, kw }) => (
+              <div key={dom} style={{ background:'rgba(255,255,255,0.07)', borderRadius:'10px', padding:'1rem' }}>
+                <div style={{ fontSize:'0.75rem', fontWeight:800, color:'#ee571d', marginBottom:'0.4rem', textTransform:'uppercase' }}>{dom}</div>
+                <p style={{ fontSize:'0.84rem', color:'#cbd5e1', lineHeight:1.8, margin:0 }}>{kw}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>How to Write a Professional Resume Summary or Objective</h2>
+        <p style={{ color: '#58657a', lineHeight: 1.8, marginBottom: '2rem', maxWidth: '780px' }}>
+          Your resume summary is the first thing a recruiter reads. It needs to communicate your role, your most relevant experience, and the value you bring — in three sentences or fewer. This guide covers resume summaries for every IT domain, from AI and machine learning to full stack, DevOps, cybersecurity, and product leadership.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
+          {[
+            { title: 'Resume Summary vs. Objective', desc: 'A resume summary highlights your experience and achievements. A resume objective states your career goal. Summaries are recommended for mid-level and senior professionals; objectives work best for freshers or career changers.' },
+            { title: 'Senior / Lead Level Summaries', desc: 'Lead with your domain and years of experience, your most impressive quantified achievement, and your core technical stack. Example: "Staff AI Engineer with 6+ years building production LLM pipelines and RAG frameworks."' },
+            { title: 'Entry-Level & Associate Summaries', desc: 'Lead with your domain and 1-2 years of experience, one key technical project or achievement, and the tools you use. Example: "ML Engineer with 2 years deploying inference APIs handling 100,000+ daily requests."' },
+            { title: 'Tailoring Your Summary', desc: 'Copy 2-3 keywords from the job description into your summary. If the role says "distributed systems", your summary should mention distributed systems. This directly improves your ATS match score.' },
+          ].map(({ title, desc }) => (
+            <div key={title} style={{ background: '#fff', border: '1px solid #e7eaf0', borderRadius: '12px', padding: '1.25rem' }}>
+              <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#172033', marginBottom: '0.5rem' }}>{title}</h3>
+              <p style={{ fontSize: '0.92rem', color: '#58657a', lineHeight: 1.7, margin: 0 }}>{desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#172033', marginBottom: '0.75rem' }}>
+          Resume Summary Questions
+        </h3>
+        <div style={{ display: 'grid', gap: '0.65rem' }}>
+          {[
+            ['How long should a resume summary be?', 'Two to four sentences. Long enough to communicate your value clearly, short enough to read in under 20 seconds. Focus on your strongest credential, your most relevant experience, and the outcome you deliver.'],
+            ['Should I use a resume summary or an objective?', 'Use a summary if you have relevant experience to showcase. Use an objective if you are a fresher, a student, or changing careers and need to explain your direction rather than your track record.'],
+            ['Can I use AI to write my resume summary?', 'Yes. NextGen Resume\'s AI generates tailored professional summaries based on your work experience and target role. Always review and edit the output to ensure every claim is accurate.'],
+            ['What keywords should I include in a resume summary?', 'Include your job title, your primary technical skills, and 2-3 keywords from the job description. This aligns your summary with what ATS and recruiters are scanning for.'],
+          ].map(([q, a]) => (
+            <details key={q} style={{ padding: '1rem 1.15rem', border: '1px solid #e4e7ee', borderRadius: '10px', background: '#fff' }}>
+              <summary style={{ fontWeight: 700, color: '#253047', cursor: 'pointer' }}>{q}</summary>
+              <p style={{ marginTop: '0.65rem', color: '#58657a', lineHeight: 1.7 }}>{a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+    </>
   );
 };
 

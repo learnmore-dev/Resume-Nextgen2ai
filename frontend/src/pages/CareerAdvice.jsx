@@ -98,6 +98,7 @@ export const CareerAdvice = () => {
   };
 
   return (
+    <>
     <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingBottom: '5rem' }}>
       {/* Hero Banner */}
       <section className="templates-hero-banner" style={{ padding: '50px 24px 55px', marginBottom: '2.5rem' }}>
@@ -559,6 +560,142 @@ export const CareerAdvice = () => {
 
       </div>
     </div>
+
+    {/* SEO Content Section */}
+    <section style={{ background: '#f7f8fb', padding: '4rem 1.5rem' }}>
+      <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+
+        {/* Stats */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            { v:'72%', l:'Of IT professionals say they underestimated their market value during negotiations' },
+            { v:'18 months', l:'Average time to promotion for engineers who document achievements consistently' },
+            { v:'23%', l:'Average salary increase when switching jobs vs staying for a raise' },
+            { v:'4×', l:'Faster career growth for engineers who actively mentor others' },
+          ].map(s => (
+            <div key={s.l} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.25rem', textAlign:'center' }}>
+              <div style={{ fontSize:'2rem', fontWeight:900, color:'#ee571d' }}>{s.v}</div>
+              <div style={{ fontSize:'0.83rem', color:'#58657a', marginTop:'0.35rem', lineHeight:1.5 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+
+        <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2.1rem)', fontWeight: 800, color: '#172033', marginBottom: '1rem' }}>
+          Career Advice for IT Professionals — Resume, Salary & Growth
+        </h2>
+        <p style={{ color: '#58657a', lineHeight: 1.8, marginBottom: '2rem', maxWidth: '780px' }}>
+          The most successful IT professionals do not just code well — they communicate their value clearly, negotiate compensation strategically, and position themselves for the next level. This guide covers action verb strategy by technical domain, the Google XYZ bullet formula, and practical career growth tactics for engineers, data professionals, and tech leaders.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
+          {[
+            { title: 'Action Verbs Matter', desc: 'Generic verbs like "worked on" or "helped with" weaken your resume. Use domain-specific power verbs: Architected, Engineered, and Containerized for backend; Orchestrated, Provisioned, and Hardened for DevOps; Modeled and Forecasted for data.' },
+            { title: 'Quantify Everything', desc: 'Numbers make claims believable. Reduced latency by 42ms. Saved $18,000/month on cloud costs. Processed 4.2M daily transactions. If you cannot attach a number, describe the scope, the team size, or the business impact.' },
+            { title: 'Grow From Senior to Lead', desc: 'The jump from senior to staff or lead is about influence, not just delivery. Demonstrate architectural decision-making, mentorship, and cross-team impact on your resume and in interviews.' },
+            { title: 'Salary Negotiation for Engineers', desc: 'Research market rates on LinkedIn Salary, Glassdoor, and Levels.fyi. Never anchor your ask to your current CTC. Counter with a number backed by market data and your proven track record.' },
+          ].map(({ title, desc }) => (
+            <div key={title} style={{ background: '#fff', border: '1px solid #e7eaf0', borderRadius: '12px', padding: '1.25rem' }}>
+              <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#172033', marginBottom: '0.5rem' }}>{title}</h3>
+              <p style={{ fontSize: '0.92rem', color: '#58657a', lineHeight: 1.7, margin: 0 }}>{desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#172033', marginBottom: '0.75rem' }}>
+          Career Growth — Common Questions
+        </h3>
+        <div style={{ display: 'grid', gap: '0.65rem', marginBottom:'2.5rem' }}>
+          {[
+            ['How do I get promoted from Senior Engineer to Staff Engineer?', 'Staff-level roles require scope beyond your immediate team. Lead architectural decisions that affect multiple systems, mentor 2-3 engineers, and build visibility with senior leadership through documented technical proposals and cross-functional projects.'],
+            ['What is the best way to negotiate a salary increase?', 'Prepare a data package: your current market rate from 2-3 sources, a list of your recent impactful achievements, and a specific counter-offer number. Never accept or reject on the spot — always ask for 24-48 hours to review.'],
+            ['How do I transition from a developer to a product manager?', 'Highlight product thinking in your current role. Write internal PRDs, define metrics for your features, and partner closely with product teams. PMs come from engineering far more often than people think.'],
+            ['Should I include side projects on a resume?', 'Yes, when the project demonstrates skills relevant to your target role. Include the tech stack, your specific contribution, and a quantifiable or observable outcome. Open-source contributions and deployed apps are especially strong.'],
+            ['How often should I update my resume?', 'Update your resume every 3–6 months, or immediately after completing a major project, earning a certification, or changing roles. Small updates are far easier than a full rewrite once per year.'],
+            ['How do I build a personal brand as an engineer?', 'Write technical articles on Medium or Dev.to, contribute to open source, speak at local meetups, and post insights on LinkedIn. Visibility compounds — a well-read article can generate recruiter outreach for years.'],
+          ].map(([q, a]) => (
+            <details key={q} style={{ padding: '1rem 1.15rem', border: '1px solid #e4e7ee', borderRadius: '10px', background: '#fff' }}>
+              <summary style={{ fontWeight: 700, color: '#253047', cursor: 'pointer' }}>{q}</summary>
+              <p style={{ marginTop: '0.65rem', color: '#58657a', lineHeight: 1.7 }}>{a}</p>
+            </details>
+          ))}
+        </div>
+
+        {/* Career Path Roadmap */}
+        <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>Tech Career Progression Roadmap</h2>
+        <p style={{ color:'#58657a', lineHeight:1.8, marginBottom:'1.5rem', maxWidth:'780px' }}>Understanding the level expectations at each stage helps you make deliberate moves rather than waiting to be promoted. Here is what distinguishes each level in a technology career.</p>
+        <div style={{ display:'grid', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            { level:'Junior / Associate (0–2 yrs)', color:'#0d9488', focus:'Execution & learning', desc:'Deliver assigned tasks reliably. Ask good questions. Write clean, documented code. Build trust by being consistent and communicative. Your primary currency at this level is dependability and growth speed.', resume:'Show: projects, internships, tech stack, GPA, certifications. Lead with education if fresh out of college.' },
+            { level:'Mid-Level / Engineer (2–5 yrs)', color:'#2563eb', focus:'Independence & ownership', desc:'Own features end-to-end. Design small systems. Unblock yourself before escalating. At this level you should be producing with minimal supervision and starting to review others\' code.', resume:'Show: projects you owned, technologies you chose, measurable outcomes. 3–5 bullets per role with numbers.' },
+            { level:'Senior Engineer (5–8 yrs)', color:'#7c3aed', focus:'Impact & influence', desc:'Drive technical direction on your team. Mentor junior engineers. Make architectural decisions. Communicate trade-offs clearly to non-technical stakeholders. Scope extends beyond your own tasks.', resume:'Show: architectural decisions, mentorship, cross-team impact, system scale, cost/performance improvements.' },
+            { level:'Staff / Principal (8–12 yrs)', color:'#ee571d', focus:'Multi-team scope & strategy', desc:'Your decisions affect multiple teams or the entire engineering organisation. You identify problems before they are assigned to you. You influence hiring standards, technical culture, and long-term platform direction.', resume:'Show: org-wide impact, technical strategy documents, hiring/culture contributions, patents or publications if applicable.' },
+            { level:'Engineering Manager / Director', color:'#172033', focus:'People, systems & business outcomes', desc:'Responsible for team health, delivery, hiring, and career development. Balances technical credibility with people management and business strategy. Success is measured through your team\'s output, not your personal code.', resume:'Show: team size, attrition rate, delivery track record, budget managed, cross-functional partnerships, business outcomes.' },
+          ].map(({ level, color, focus, desc, resume }) => (
+            <div key={level} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.35rem', borderLeft:`4px solid ${color}` }}>
+              <div style={{ display:'flex', alignItems:'center', gap:'0.75rem', marginBottom:'0.5rem' }}>
+                <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#172033', margin:0 }}>{level}</h3>
+                <span style={{ fontSize:'0.72rem', fontWeight:800, color, background:`${color}15`, padding:'3px 10px', borderRadius:'999px' }}>{focus}</span>
+              </div>
+              <p style={{ fontSize:'0.88rem', color:'#374151', lineHeight:1.7, marginBottom:'0.5rem' }}>{desc}</p>
+              <div style={{ fontSize:'0.8rem', color:'#58657a', background:'#f8fafc', borderRadius:'6px', padding:'0.6rem 0.75rem' }}>
+                <strong style={{ color:'#172033' }}>On your resume: </strong>{resume}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Salary Negotiation */}
+        <div style={{ background:'#192337', borderRadius:'16px', padding:'2rem', marginBottom:'2.5rem', color:'#fff' }}>
+          <h2 style={{ fontSize:'1.4rem', fontWeight:800, margin:'0 0 0.5rem', color:'#fff' }}>5-Step Salary Negotiation Playbook</h2>
+          <p style={{ color:'#94a3b8', lineHeight:1.7, marginBottom:'1.25rem', maxWidth:'700px' }}>Most engineers leave 10–25% of their compensation on the table by not negotiating. These five steps give you a repeatable process.</p>
+          <div style={{ display:'grid', gap:'0.75rem' }}>
+            {[
+              { step:'Step 1: Research before the first call', detail:'Look up market rates on Glassdoor, LinkedIn Salary, Levels.fyi, and AmbitionBox. Get 3 data points for your exact role, city, and years of experience. Know your number before any recruiter calls.' },
+              { step:'Step 2: Never give a number first', detail:'When asked "what is your current CTC or expectation?", deflect: "I am focused on the right fit. Could you share the budgeted range for this level?" This forces them to anchor first.' },
+              { step:'Step 3: Express excitement before countering', detail:'Always say something genuinely positive about the offer or the company before countering. "I am really excited about this role and the team. Based on my research and the scope we discussed, I was expecting closer to [X]."' },
+              { step:'Step 4: Counter with a specific, justified number', detail:'Counter with a specific figure — not a range. Ranges let the employer pick the bottom. Justify with your market data, a competing offer if you have one, and 1–2 specific achievements that demonstrate your level.' },
+              { step:'Step 5: Ask for 24–48 hours for any written offer', detail:'Never accept or reject on the spot. "Thank you — I would like to review this carefully with my family. Can I get back to you by [date]?" This gives you time to consult with others and negotiate without pressure.' },
+            ].map(({ step, detail }, i) => (
+              <div key={step} style={{ background:'rgba(255,255,255,0.07)', borderRadius:'10px', padding:'1rem', display:'flex', gap:'0.75rem' }}>
+                <div style={{ minWidth:'28px', height:'28px', borderRadius:'50%', background:'#ee571d', color:'#fff', fontWeight:900, fontSize:'0.85rem', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>{i+1}</div>
+                <div>
+                  <div style={{ fontSize:'0.88rem', fontWeight:800, color:'#f1f5f9', marginBottom:'0.25rem' }}>{step}</div>
+                  <p style={{ fontSize:'0.85rem', color:'#94a3b8', lineHeight:1.6, margin:0 }}>{detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* In-Demand Skills 2025 */}
+        <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>In-Demand Tech Skills in 2025</h2>
+        <p style={{ color:'#58657a', lineHeight:1.8, marginBottom:'1.5rem', maxWidth:'780px' }}>These are the skills hiring managers are actively seeking right now. Including them on your resume where genuinely applicable will significantly boost your ATS match rate.</p>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'0.85rem', marginBottom:'2.5rem' }}>
+          {[
+            { skill:'Large Language Models (LLMs)', demand:'🔥 Extremely High', cat:'AI & ML' },
+            { skill:'Retrieval-Augmented Generation', demand:'🔥 Extremely High', cat:'AI & ML' },
+            { skill:'Kubernetes & Container Orchestration', demand:'🔴 Very High', cat:'DevOps' },
+            { skill:'Terraform / Infrastructure as Code', demand:'🔴 Very High', cat:'Cloud' },
+            { skill:'Apache Kafka / Event Streaming', demand:'🔴 Very High', cat:'Data' },
+            { skill:'React.js / Next.js', demand:'🟠 High', cat:'Frontend' },
+            { skill:'Python (Data/ML/Backend)', demand:'🟠 High', cat:'General' },
+            { skill:'AWS / GCP / Azure', demand:'🟠 High', cat:'Cloud' },
+            { skill:'dbt / Data Lakehouse', demand:'🟡 Growing', cat:'Data' },
+            { skill:'Rust / Go (Systems)', demand:'🟡 Growing', cat:'Backend' },
+            { skill:'Prompt Engineering', demand:'🟡 Growing', cat:'AI & ML' },
+            { skill:'Cybersecurity / Zero Trust', demand:'🟡 Growing', cat:'Security' },
+          ].map(({ skill, demand, cat }) => (
+            <div key={skill} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'10px', padding:'1rem' }}>
+              <div style={{ fontSize:'0.72rem', fontWeight:800, color:'#64748b', textTransform:'uppercase', marginBottom:'0.3rem' }}>{cat}</div>
+              <div style={{ fontSize:'0.92rem', fontWeight:700, color:'#172033', marginBottom:'0.3rem' }}>{skill}</div>
+              <div style={{ fontSize:'0.78rem', color:'#58657a' }}>{demand}</div>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </section>
+    </>
   );
 };
 

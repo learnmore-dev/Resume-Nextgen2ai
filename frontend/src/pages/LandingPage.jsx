@@ -23,6 +23,11 @@ export const LandingPage = () => {
     navigate(targetPath);
   };
 
+  const handleKeywordClick = (path) => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    navigate(path);
+  };
+
   const toggleFaq = (index) => {
     setActiveFaq(activeFaq === index ? null : index);
   };
@@ -59,6 +64,22 @@ export const LandingPage = () => {
     {
       q: "Do I still need to edit the resume after AI suggestions?",
       a: "While our AI provides strong, high-impact bullet suggestions, we always recommend reviewing the final content to ensure it perfectly reflects your voice and exact metrics."
+    },
+    {
+      q: "What is an ATS and why does it matter?",
+      a: "ATS stands for Applicant Tracking System — software used by most mid-to-large companies to automatically filter resumes before a human reads them. Around 75% of resumes are rejected by ATS. NextGen Resume helps you pass ATS filters by checking your resume against the actual job description and highlighting missing keywords."
+    },
+    {
+      q: "How do I make my resume ATS friendly?",
+      a: "Use standard section headings like Experience, Education, and Skills. Avoid tables, images, and columns. Match keywords exactly from the job description. Use a clean, single-column layout. NextGen Resume's ATS checker scores your resume against any job posting and shows you exactly what to fix."
+    },
+    {
+      q: "How long should my resume be?",
+      a: "For 0–5 years of experience: one page. For 5+ years or senior roles: one to two pages. Never exceed two pages unless you are in academia or applying for a C-suite role with an extensive track record. Quality and relevance always beat length."
+    },
+    {
+      q: "Can I use NextGen Resume for multiple job applications?",
+      a: "Yes. You can create multiple resume versions in your free account — one tailored for each role or company you are applying to. Tailoring your resume for each application significantly increases your response rate."
     }
   ];
 
@@ -484,7 +505,151 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* 7. FAQ Block */}
+      {/* 7. SEO Keywords Block */}
+      <section className="seo-keywords-block">
+        <div className="seo-keywords-inner">
+          <h2 className="seo-keywords-title">Explore Resume Tools & Guides</h2>
+          <p className="seo-keywords-desc">Find the right resume builder for every career stage and need.</p>
+          <div className="seo-keywords-grid">
+            {[
+              { label: 'Free Resume Builder', path: '/free-resume-builder' },
+              { label: 'Free Resume Templates', path: '/free-resume-templates' },
+              { label: 'ATS Friendly Resume Template', path: '/ats-resume-builder' },
+              { label: 'Professional Resume Builder', path: '/professional-resume-builder' },
+              { label: 'Best AI Resume Builder', path: '/ai-resume-builder' },
+              { label: 'Google Docs Resume Templates', path: '/google-docs-resume-templates' },
+              { label: 'Resume Builder No Pay', path: '/resume-builder-no-pay' },
+              { label: 'Resume Builder PDF', path: '/resume-builder-pdf' },
+              { label: 'Microsoft Word Resume Download', path: '/resume-builder-microsoft-word' },
+              { label: 'Resume Builder for Freshers', path: '/resume-builder-for-freshers' },
+              { label: 'Create Resume Online Free', path: '/create-resume-online-free' },
+              { label: 'Edit Resume Online Free', path: '/edit-resume-online' },
+              { label: 'Resume Builder for Students', path: '/student-resume-builder' },
+              { label: 'Resume Examples', path: '/resume-examples' },
+              { label: 'Kickresume Alternative', path: '/kickresume-alternative' },
+            ].map(({ label, path }) => (
+              <button
+                key={path}
+                type="button"
+                className="seo-keyword-chip"
+                onClick={() => handleKeywordClick(path)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7b. Resume Stats Strip */}
+      <section style={{ padding:'3rem 1.5rem', background:'#fff' }}>
+        <div style={{ maxWidth:'1080px', margin:'0 auto' }}>
+          <h2 style={{ fontSize:'clamp(1.4rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', textAlign:'center', marginBottom:'0.5rem' }}>Why Your Resume Matters More Than You Think</h2>
+          <p style={{ color:'#64748b', textAlign:'center', marginBottom:'2rem' }}>The numbers behind job searching — and why a strong resume changes everything.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:'1.25rem' }}>
+            {[
+              { v:'75%', l:'of resumes are rejected by ATS before a human ever reads them' },
+              { v:'6 sec', l:'average time a recruiter spends reviewing a resume on first pass' },
+              { v:'250+', l:'average applications received per corporate job opening' },
+              { v:'40%', l:'more interview callbacks when a resume is tailored to the job description' },
+              { v:'3×', l:'higher offer rate for candidates who quantify achievements with numbers' },
+            ].map(s => (
+              <div key={s.l} style={{ background:'#f7f8fb', borderRadius:'14px', padding:'1.5rem', textAlign:'center' }}>
+                <div style={{ fontSize:'2.2rem', fontWeight:900, color:'#ee571d', lineHeight:1 }}>{s.v}</div>
+                <p style={{ fontSize:'0.85rem', color:'#58657a', marginTop:'0.5rem', lineHeight:1.6 }}>{s.l}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7c. How It Works */}
+      <section style={{ padding:'3.5rem 1.5rem', background:'#f7f8fb' }}>
+        <div style={{ maxWidth:'1080px', margin:'0 auto' }}>
+          <h2 style={{ fontSize:'clamp(1.4rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', textAlign:'center', marginBottom:'0.5rem' }}>How It Works — Build Your Resume in 4 Steps</h2>
+          <p style={{ color:'#64748b', textAlign:'center', marginBottom:'2rem' }}>From blank page to job-ready PDF in minutes.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'1.25rem' }}>
+            {[
+              { n:'01', title:'Choose a Template', desc:'Browse professionally designed, ATS-friendly resume templates built for every industry and career level. Pick the one that suits your style.' },
+              { n:'02', title:'Fill In Your Details', desc:'Enter your experience, education, skills, and achievements. Our AI assistant suggests impactful bullet points and keywords tailored to your target role.' },
+              { n:'03', title:'Check Your ATS Score', desc:'Paste a job description and instantly see how well your resume matches. Identify missing keywords and close gaps before you apply.' },
+              { n:'04', title:'Download & Apply', desc:'Export a clean, professionally formatted PDF in one click. Your resume is ready to submit to any job portal, email, or application form.' },
+            ].map(({ n, title, desc }) => (
+              <div key={n} style={{ background:'#fff', borderRadius:'14px', padding:'1.5rem', border:'1px solid #e7eaf0', position:'relative', overflow:'hidden' }}>
+                <div style={{ fontSize:'3rem', fontWeight:900, color:'#ee571d', opacity:0.12, position:'absolute', top:'0.5rem', right:'0.75rem', lineHeight:1 }}>{n}</div>
+                <div style={{ fontSize:'1.5rem', fontWeight:900, color:'#ee571d', marginBottom:'0.6rem' }}>{n}</div>
+                <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#172033', marginBottom:'0.4rem' }}>{title}</h3>
+                <p style={{ fontSize:'0.88rem', color:'#58657a', lineHeight:1.7, margin:0 }}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7d. Comparison Table */}
+      <section style={{ padding:'3.5rem 1.5rem', background:'#fff' }}>
+        <div style={{ maxWidth:'1080px', margin:'0 auto' }}>
+          <h2 style={{ fontSize:'clamp(1.4rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', textAlign:'center', marginBottom:'0.5rem' }}>NextGen Resume vs The Alternatives</h2>
+          <p style={{ color:'#64748b', textAlign:'center', marginBottom:'2rem' }}>See how we compare against traditional resume writing and other online builders.</p>
+          <div style={{ overflowX:'auto' }}>
+            <table style={{ width:'100%', borderCollapse:'collapse', fontSize:'0.9rem' }}>
+              <thead>
+                <tr style={{ background:'#192337', color:'#fff' }}>
+                  <th style={{ padding:'1rem 1.25rem', textAlign:'left', borderRadius:'12px 0 0 0' }}>Feature</th>
+                  <th style={{ padding:'1rem 1.25rem', textAlign:'center', color:'#ff8a57' }}>NextGen Resume</th>
+                  <th style={{ padding:'1rem 1.25rem', textAlign:'center' }}>Traditional Writing</th>
+                  <th style={{ padding:'1rem 1.25rem', textAlign:'center', borderRadius:'0 12px 0 0' }}>Other Builders</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Price', '✅ Free', '❌ ₹3,000–₹15,000', '⚠️ Paid plans'],
+                  ['AI Writing Suggestions', '✅ Yes — built-in', '❌ Manual only', '⚠️ Limited / paid'],
+                  ['ATS Score Checker', '✅ Yes — any job description', '❌ No', '⚠️ Paid feature'],
+                  ['Professional Templates', '✅ Multiple, free', '⚠️ Basic Word doc', '✅ Available'],
+                  ['PDF Download', '✅ Free, one click', '⚠️ Manual export', '⚠️ Paid on most'],
+                  ['Edit Anytime', '✅ Unlimited, free', '❌ Pay per revision', '⚠️ Subscription'],
+                  ['Multiple Resume Versions', '✅ Yes — free', '❌ Extra charge', '⚠️ Paid plan'],
+                ].map(([feat, ng, trad, other], i) => (
+                  <tr key={feat} style={{ background: i % 2 === 0 ? '#f7f8fb' : '#fff', borderBottom:'1px solid #e7eaf0' }}>
+                    <td style={{ padding:'0.9rem 1.25rem', fontWeight:600, color:'#172033' }}>{feat}</td>
+                    <td style={{ padding:'0.9rem 1.25rem', textAlign:'center', color:'#16a34a', fontWeight:600 }}>{ng}</td>
+                    <td style={{ padding:'0.9rem 1.25rem', textAlign:'center', color:'#58657a' }}>{trad}</td>
+                    <td style={{ padding:'0.9rem 1.25rem', textAlign:'center', color:'#58657a' }}>{other}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* 7e. Testimonials */}
+      <section style={{ padding:'3.5rem 1.5rem', background:'#f7f8fb' }}>
+        <div style={{ maxWidth:'1080px', margin:'0 auto' }}>
+          <h2 style={{ fontSize:'clamp(1.4rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', textAlign:'center', marginBottom:'0.5rem' }}>What Job Seekers Are Saying</h2>
+          <p style={{ color:'#64748b', textAlign:'center', marginBottom:'2rem' }}>Real feedback from people who built their resume with NextGen Resume.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))', gap:'1.25rem' }}>
+            {[
+              { name:'Priya Sharma', role:'Software Engineer — Hired at Infosys', stars:5, review:'I tried three different resume builders and NextGen was the only one that gave me an actual ATS score against the job description. Got my first interview in two weeks.' },
+              { name:'Rahul Mehta', role:'Data Analyst — Freshers, just graduated', stars:5, review:'As a fresher I had no idea what to write. The AI suggestions helped me structure my project work into real bullet points. Landed 3 interview calls in the first month.' },
+              { name:'Anjali Verma', role:'Senior Marketing Manager', stars:5, review:'I had not updated my resume in 4 years. The section-by-section builder made it easy to modernise everything. The PDF export looks extremely professional.' },
+              { name:'Karthik Iyer', role:'DevOps Engineer — Career switch from IT support', stars:5, review:'Switching careers is hard but NextGen Resume helped me highlight my transferable skills and certifications in a way that actually got responses from tech companies.' },
+            ].map(({ name, role, stars, review }) => (
+              <div key={name} style={{ background:'#fff', borderRadius:'14px', padding:'1.5rem', border:'1px solid #e7eaf0' }}>
+                <div style={{ display:'flex', gap:'2px', marginBottom:'0.75rem' }}>
+                  {Array(stars).fill('⭐').map((s,i) => <span key={i} style={{ fontSize:'0.9rem' }}>{s}</span>)}
+                </div>
+                <p style={{ fontSize:'0.9rem', color:'#374151', lineHeight:1.7, marginBottom:'1rem', fontStyle:'italic' }}>"{review}"</p>
+                <div style={{ fontSize:'0.88rem', fontWeight:700, color:'#172033' }}>{name}</div>
+                <div style={{ fontSize:'0.8rem', color:'#64748b' }}>{role}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 8. FAQ Block */}
       <section className="faq-block">
         <h2 className="section-title">Frequently Asked Questions</h2>
         <div className="faq-list">

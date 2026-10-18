@@ -82,6 +82,7 @@ export const InterviewTips = () => {
   };
 
   return (
+    <>
     <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingBottom: '5rem' }}>
       {/* Hero Header */}
       <section className="templates-hero-banner" style={{ padding: '50px 24px 55px', marginBottom: '2.5rem' }}>
@@ -436,6 +437,132 @@ export const InterviewTips = () => {
 
       </div>
     </div>
+
+    {/* SEO Content Section */}
+    <section style={{ background: '#f7f8fb', padding: '4rem 1.5rem' }}>
+      <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+
+        {/* Stats Strip */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            { v:'47%', l:'Candidates fail interviews due to poor preparation, not lack of skills' },
+            { v:'2–3 hrs', l:'Average preparation time top performers spend per interview round' },
+            { v:'85%', l:'Of jobs are filled through networking and referrals, not job boards' },
+            { v:'5×', l:'Higher offer rate when candidates prepare structured STAR answers' },
+          ].map(s => (
+            <div key={s.l} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.25rem', textAlign:'center' }}>
+              <div style={{ fontSize:'2rem', fontWeight:900, color:'#ee571d' }}>{s.v}</div>
+              <div style={{ fontSize:'0.83rem', color:'#58657a', marginTop:'0.35rem', lineHeight:1.5 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+
+        <h2 style={{ fontSize:'clamp(1.5rem,3vw,2.1rem)', fontWeight: 800, color: '#172033', marginBottom: '1rem' }}>
+          Master Your Job Interview — Complete Preparation Guide
+        </h2>
+        <p style={{ color: '#58657a', lineHeight: 1.8, marginBottom: '2rem', maxWidth: '780px' }}>
+          Landing an interview is only half the battle. Senior roles in technology, product, and data demand more than rehearsed answers — they require structured storytelling, data-backed examples, and confident salary negotiation. This guide covers the STAR method, behavioral question frameworks, salary negotiation scripts, and 30-60-90 day onboarding plans so you walk into every interview prepared to win.
+        </p>
+
+        {/* Top 10 Interview Tips */}
+        <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>Top 10 Interview Preparation Tips</h2>
+        <p style={{ color:'#58657a', lineHeight:1.8, marginBottom:'1.5rem', maxWidth:'780px' }}>These are the tips that separate prepared candidates from unprepared ones — the difference between an offer and a rejection.</p>
+        <div style={{ display:'grid', gap:'0.75rem', marginBottom:'2.5rem' }}>
+          {[
+            ['Research the company deeply', 'Read their last 3 blog posts, LinkedIn page, Glassdoor reviews, and recent news. Know their tech stack, product roadmap, and business challenges. Interviewers immediately notice candidates who have done their homework.'],
+            ['Prepare 6–8 STAR stories', 'Have ready-to-go stories for: a conflict you resolved, a project you led, a failure you recovered from, a time you influenced without authority, your biggest technical achievement, and a time you mentored someone.'],
+            ['Know your resume cold', 'Every line on your resume is a potential interview question. Be able to elaborate on every project, metric, and technology listed. Never put anything on your resume you cannot speak to confidently.'],
+            ['Prepare smart questions to ask', 'Ask about technical challenges the team is currently solving, how success is measured for this role in the first 90 days, and team culture. Never ask about salary in a first round unless the interviewer brings it up.'],
+            ['Practice out loud, not in your head', 'Saying an answer and thinking an answer are completely different. Record yourself on video, do mock interviews, and practice with a friend. This removes filler words and tightens your delivery.'],
+            ['Dress one level above the company culture', 'If the team is casual, wear smart casual. If they are business casual, wear business formal. When in doubt, it is always better to be slightly overdressed.'],
+            ['Arrive (or log in) early', 'For in-person: arrive 10–15 minutes early. For video: test your camera, microphone, lighting, and internet connection 30 minutes before. Technical issues that delay the start create a bad first impression.'],
+            ['Control your pace and tone', 'Speak at 80% of your natural speed. Pause before answering complex questions — interviewers respect thoughtfulness. Avoid filler words like "um", "like", and "you know".'],
+            ['Send a follow-up email within 24 hours', 'Thank the interviewer by name, reference one specific topic you discussed, and restate your interest in the role. Most candidates skip this step — doing it immediately makes you memorable.'],
+            ['Debrief after every round', 'Write down every question you were asked within 30 minutes of finishing. Note which answers went well and which felt weak. Use this to prepare better for the next round or your next interview.'],
+          ].map(([tip, detail], i) => (
+            <div key={tip} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.2rem 1.35rem', display:'flex', gap:'1rem' }}>
+              <div style={{ minWidth:'36px', height:'36px', borderRadius:'50%', background:'#fff3ee', color:'#ee571d', fontWeight:900, fontSize:'1rem', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>{i+1}</div>
+              <div>
+                <h3 style={{ margin:'0 0 0.3rem', fontSize:'0.97rem', fontWeight:800, color:'#172033' }}>{tip}</h3>
+                <p style={{ margin:0, fontSize:'0.88rem', color:'#58657a', lineHeight:1.7 }}>{detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Common Mistakes */}
+        <div style={{ background:'#fef2f2', borderRadius:'16px', padding:'2rem', marginBottom:'2.5rem' }}>
+          <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>6 Interview Mistakes That Kill Your Chances</h2>
+          <p style={{ color:'#58657a', lineHeight:1.8, marginBottom:'1.25rem', maxWidth:'700px' }}>Avoid these common mistakes — any one of them can end an otherwise strong interview.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:'1rem' }}>
+            {[
+              { m:'Badmouthing previous employers', d:'Even if your last job was terrible, never speak negatively about your former company, manager, or teammates. Interviewers immediately wonder how you will talk about them one day.' },
+              { m:'Vague answers with no specifics', d:'"I worked on improving the backend" tells the interviewer nothing. Every answer needs a specific context, action, and measurable outcome. Vague answers signal weak experience.' },
+              { m:'Not asking any questions', d:'Saying "I don\'t have any questions" signals low interest in the role. Always have 3–4 thoughtful questions ready about the team, the technology, or what success looks like in this position.' },
+              { m:'Lying or exaggerating', d:'Senior engineers and hiring managers can immediately tell when a candidate is bluffing on technical depth. If you don\'t know something, say so — then demonstrate your ability to learn it quickly.' },
+              { m:'Checking your phone or watch', d:'Put your phone on silent and out of sight. Checking the time or your phone even once during an interview signals disrespect for the interviewer\'s time.' },
+              { m:'Memorised, robotic answers', d:'Rehearsed answers that sound scripted feel inauthentic. Use your STAR stories as a structure, but speak naturally and conversationally — let your personality come through.' },
+            ].map(({ m, d }) => (
+              <div key={m} style={{ background:'#fff', borderRadius:'10px', padding:'1rem', border:'1px solid #fecaca' }}>
+                <h3 style={{ fontSize:'0.95rem', fontWeight:800, color:'#dc2626', marginBottom:'0.4rem' }}>✗ {m}</h3>
+                <p style={{ fontSize:'0.87rem', color:'#374151', lineHeight:1.6, margin:0 }}>{d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Body Language */}
+        <div style={{ background:'#192337', borderRadius:'16px', padding:'2rem', marginBottom:'2.5rem', color:'#fff' }}>
+          <h2 style={{ fontSize:'1.4rem', fontWeight:800, margin:'0 0 0.5rem', color:'#fff' }}>Body Language & Confidence in Interviews</h2>
+          <p style={{ color:'#94a3b8', lineHeight:1.7, marginBottom:'1.25rem', maxWidth:'700px' }}>Research shows that 55% of communication is non-verbal. Your body language can signal confidence or nervousness before you say a single word.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:'1rem' }}>
+            {[
+              { tip:'Firm handshake & eye contact', detail:'Make direct eye contact when speaking and listening. A firm (not crushing) handshake signals confidence and professionalism.' },
+              { tip:'Open, upright posture', detail:'Sit up straight, shoulders back. Leaning slightly forward shows engagement. Crossed arms signal defensiveness — keep your body open.' },
+              { tip:'Smile naturally', detail:'A natural smile signals warmth and approachability. Forced smiles are obvious — let genuine interest in the conversation create the smile.' },
+              { tip:'Control nervous habits', detail:'Avoid fidgeting, pen-clicking, hair-touching, or repeated "um"s. If you feel nervous energy, place both feet flat on the floor and take a slow breath before answering.' },
+            ].map(({ tip, detail }) => (
+              <div key={tip} style={{ background:'rgba(255,255,255,0.07)', borderRadius:'10px', padding:'1rem' }}>
+                <div style={{ fontSize:'0.82rem', fontWeight:800, color:'#ee571d', marginBottom:'0.4rem', textTransform:'uppercase' }}>{tip}</div>
+                <p style={{ fontSize:'0.87rem', color:'#cbd5e1', lineHeight:1.6, margin:0 }}>{detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
+          {[
+            { title: 'STAR Method Answers', desc: 'Structure every behavioral answer with Situation, Task, Action, and Result. Quantify your outcomes with real numbers to stand out from generic responses.' },
+            { title: 'Salary Negotiation', desc: 'Never anchor low. Use market data, competing offers, and scripted counter-offer responses to negotiate a 15–25% higher compensation package.' },
+            { title: '30-60-90 Day Plan', desc: 'Walk into your new role with a structured plan. Show hiring managers you understand how to build trust, demonstrate value, and deliver impact from day one.' },
+            { title: 'Technical & Behavioral Blend', desc: 'Senior interviewers assess both technical depth and leadership maturity. Prepare answers that showcase architectural decisions alongside team collaboration and conflict resolution.' },
+          ].map(({ title, desc }) => (
+            <div key={title} style={{ background: '#fff', border: '1px solid #e7eaf0', borderRadius: '12px', padding: '1.25rem' }}>
+              <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#172033', marginBottom: '0.5rem' }}>{title}</h3>
+              <p style={{ fontSize: '0.92rem', color: '#58657a', lineHeight: 1.7, margin: 0 }}>{desc}</p>
+            </div>
+          ))}
+        </div>
+
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#172033', marginBottom: '0.75rem' }}>
+          Frequently Asked Interview Questions
+        </h3>
+        <div style={{ display: 'grid', gap: '0.65rem' }}>
+          {[
+            ['How do I answer "Tell me about yourself"?', 'Structure your answer as a career narrative: your background, your most relevant achievement, and why you are excited about this specific role. Keep it under 2 minutes and always end by connecting to the job.'],
+            ['How do I negotiate salary without losing the offer?', 'Express genuine excitement first, ask for the written offer breakdown, then counter with a specific number anchored to market data. Use scripts that tie your ask to your demonstrated impact.'],
+            ['What should I prepare for a technical interview?', 'Review the job description for key technologies, prepare examples of architectural decisions you have made, and practice explaining complex systems clearly to non-technical stakeholders.'],
+            ['How do I prepare a 30-60-90 day plan?', 'The first 30 days focus on listening and learning. Days 31-60 are for identifying quick wins. Days 61-90 are for delivering a meaningful contribution that is visible to leadership.'],
+          ].map(([q, a]) => (
+            <details key={q} style={{ padding: '1rem 1.15rem', border: '1px solid #e4e7ee', borderRadius: '10px', background: '#fff' }}>
+              <summary style={{ fontWeight: 700, color: '#253047', cursor: 'pointer' }}>{q}</summary>
+              <p style={{ marginTop: '0.65rem', color: '#58657a', lineHeight: 1.7 }}>{a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+    </>
   );
 };
 

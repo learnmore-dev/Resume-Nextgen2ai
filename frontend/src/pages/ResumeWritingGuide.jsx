@@ -86,6 +86,7 @@ export const ResumeWritingGuide = () => {
   };
 
   return (
+    <>
     <div style={{ background: '#F8FAFC', minHeight: '100vh', paddingBottom: '5rem' }}>
       {/* Hero Banner */}
       <section className="templates-hero-banner" style={{ padding: '50px 24px 55px', marginBottom: '2.5rem' }}>
@@ -424,6 +425,133 @@ export const ResumeWritingGuide = () => {
 
       </div>
     </div>
+
+    {/* SEO Content Section */}
+    <section style={{ background: '#f7f8fb', padding: '4rem 1.5rem' }}>
+      <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
+        <h2 style={{ fontSize: 'clamp(1.5rem,3vw,2.1rem)', fontWeight: 800, color: '#172033', marginBottom: '1rem' }}>
+          How to Write a Resume That Gets Interviews — Complete Guide
+        </h2>
+        <p style={{ color: '#58657a', lineHeight: 1.8, marginBottom: '2rem', maxWidth: '780px' }}>
+          A great resume is not a list of duties — it is a marketing document that shows hiring managers exactly what you achieved, how you achieved it, and what you will bring to their team. This guide covers the Google X-Y-Z formula for bullet points, ATS optimization, action verbs by industry, and common resume mistakes to avoid.
+        </p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
+          {[
+            { title: 'Google X-Y-Z Bullet Formula', desc: 'Write every bullet as: Accomplished [X] as measured by [Y] by doing [Z]. This forces you to quantify impact and describe your method — exactly what senior recruiters look for.' },
+            { title: 'ATS Optimization', desc: 'Use the exact job title and keywords from the job description. Avoid tables, columns, and images. Stick to standard section headings like Experience, Education, and Skills.' },
+            { title: 'Power Verbs by Domain', desc: 'Engineering: Architected, Engineered, Optimized. DevOps: Orchestrated, Provisioned, Automated. Leadership: Spearheaded, Mentored, Delivered. Use role-specific verbs to signal domain expertise.' },
+            { title: 'Resume Length & Format', desc: 'One page for under 5 years of experience. Two pages for senior roles. Use a single-column layout for maximum ATS compatibility. Margins of 0.5–1 inch and font sizes 10–12pt.' },
+          ].map(({ title, desc }) => (
+            <div key={title} style={{ background: '#fff', border: '1px solid #e7eaf0', borderRadius: '12px', padding: '1.25rem' }}>
+              <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#172033', marginBottom: '0.5rem' }}>{title}</h3>
+              <p style={{ fontSize: '0.92rem', color: '#58657a', lineHeight: 1.7, margin: 0 }}>{desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Stats Strip */}
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            { v:'75%', l:'Resumes rejected by ATS before a human reads them' },
+            { v:'6 sec', l:'Average recruiter time spent on a resume at first glance' },
+            { v:'40%', l:'More interviews when resume is tailored to the job description' },
+            { v:'3×', l:'Higher callback rate with quantified achievement bullets' },
+          ].map(s => (
+            <div key={s.l} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.25rem', textAlign:'center' }}>
+              <div style={{ fontSize:'2rem', fontWeight:900, color:'#ee571d' }}>{s.v}</div>
+              <div style={{ fontSize:'0.83rem', color:'#58657a', marginTop:'0.35rem', lineHeight:1.5 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Section-by-Section Guide */}
+        <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>Section-by-Section Resume Writing Guide</h2>
+        <p style={{ color:'#58657a', lineHeight:1.8, marginBottom:'1.5rem', maxWidth:'780px' }}>Every section of your resume has a job to do. Here is exactly what to write in each one, what to avoid, and how recruiters read each part.</p>
+        <div style={{ display:'grid', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            { sec:'Contact Information', do:'Full name, city & state (not full address), professional email, phone, LinkedIn URL, and portfolio link if relevant.', avoid:'Personal email addresses like "coolboy99@", full home address, or social media handles unless they are professional.' },
+            { sec:'Professional Summary (2–4 lines)', do:'State your role, years of experience, top achievement with a number, and one sentence on what you bring to your next role. Tailor it for every application.', avoid:'Objective statements like "Looking for a challenging opportunity." Generic phrases like "team player" or "hard worker" with no evidence.' },
+            { sec:'Work Experience', do:'List roles in reverse chronological order. For each: company name, job title, dates, location, and 3–5 bullet points written in the X-Y-Z format with quantified outcomes.', avoid:'Job duty lists starting with "Responsible for..." No numbers. Paragraphs instead of bullets. Unexplained gaps.' },
+            { sec:'Education', do:'Degree, institution, graduation year, GPA if above 3.5/8.0, and relevant coursework or academic honours for freshers.', avoid:'High school details (unless you have no degree). GPA below 3.0. Irrelevant coursework.' },
+            { sec:'Skills', do:'List technical skills relevant to the target role. Organise by category: Languages, Frameworks, Tools, Cloud, Databases. Match keywords from the job description exactly.', avoid:'Soft skills like "communication" in a skills section. Listing every tool you have ever touched. Rating skills with bars or stars.' },
+            { sec:'Projects', do:'Include 2–3 projects with: what you built, the tech stack, your specific contribution, and a measurable outcome or GitHub link.', avoid:'Vague project names with no description. Tutorial projects or cloned repos with no customisation.' },
+            { sec:'Certifications', do:'List certification name, issuing body, and year. Include only relevant, current certifications (AWS, Google Cloud, PMP, CFA, etc.).', avoid:'Expired certifications. Irrelevant online course completions with no recognised credential.' },
+          ].map(({ sec, do: d, avoid }) => (
+            <div key={sec} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.35rem' }}>
+              <h3 style={{ fontSize:'1rem', fontWeight:800, color:'#172033', marginBottom:'0.6rem' }}>{sec}</h3>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem' }}>
+                <div style={{ background:'#f0fdf4', borderRadius:'8px', padding:'0.75rem' }}>
+                  <div style={{ fontSize:'0.75rem', fontWeight:800, color:'#16a34a', marginBottom:'0.3rem' }}>✓ DO</div>
+                  <p style={{ fontSize:'0.88rem', color:'#374151', lineHeight:1.6, margin:0 }}>{d}</p>
+                </div>
+                <div style={{ background:'#fef2f2', borderRadius:'8px', padding:'0.75rem' }}>
+                  <div style={{ fontSize:'0.75rem', fontWeight:800, color:'#dc2626', marginBottom:'0.3rem' }}>✗ AVOID</div>
+                  <p style={{ fontSize:'0.88rem', color:'#374151', lineHeight:1.6, margin:0 }}>{avoid}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Industry Tips */}
+        <h2 style={{ fontSize:'clamp(1.3rem,2.5vw,1.9rem)', fontWeight:800, color:'#172033', margin:'0 0 0.5rem' }}>Resume Tips by Industry</h2>
+        <p style={{ color:'#58657a', lineHeight:1.8, marginBottom:'1.5rem', maxWidth:'780px' }}>Different industries expect different resume styles. Here is what hiring managers in each field actually want to see.</p>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:'1rem', marginBottom:'2.5rem' }}>
+          {[
+            { ind:'💻 Technology & Software', tips:['Lead with GitHub profile and deployed projects','List specific programming languages and frameworks — not just "experienced in coding"','Show system scale: users served, requests/sec, uptime SLAs','Include open-source contributions if available','Mention cloud certifications (AWS, GCP, Azure)'] },
+            { ind:'📊 Finance & Banking', tips:['Lead with deal sizes, portfolio values, or cost savings','Include CFA, FRM, CA, or CPA credentials prominently','Show regulatory knowledge (SEBI, RBI, Basel, IFRS)','Quantify everything: revenue, AUM, P&L impact','One or two pages maximum — finance resumes are expected to be concise'] },
+            { ind:'📣 Marketing & Growth', tips:['Show campaign ROI, CAC, LTV, and conversion rates','Mention tools: Google Analytics, HubSpot, SEMrush, Meta Ads','Include content output: articles published, traffic grown, leads generated','Brand names and budgets managed add credibility','SEO keyword rankings and organic growth metrics stand out'] },
+            { ind:'🏥 Healthcare', tips:['List all clinical certifications and licences clearly','Include specialisations and procedures you are trained in','Show patient volume or outcomes where ethical and permissible','Mention any research publications or clinical trials','Compliance and regulatory knowledge (HIPAA, NABH) is valued'] },
+            { ind:'🎨 Design & Creative', tips:['Portfolio link is more important than any bullet point','Show the business impact of your design work, not just aesthetics','Include tools: Figma, Adobe XD, Illustrator, After Effects','Mention user research and usability testing experience','Before/after metrics like conversion rate lift make strong bullets'] },
+          ].map(({ ind, tips }) => (
+            <div key={ind} style={{ background:'#fff', border:'1px solid #e7eaf0', borderRadius:'12px', padding:'1.35rem' }}>
+              <h3 style={{ fontSize:'0.97rem', fontWeight:800, color:'#172033', marginBottom:'0.75rem' }}>{ind}</h3>
+              <ul style={{ margin:0, paddingLeft:'1.1rem', display:'grid', gap:'0.4rem' }}>
+                {tips.map(t => <li key={t} style={{ fontSize:'0.87rem', color:'#58657a', lineHeight:1.6 }}>{t}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Power Verbs Reference */}
+        <div style={{ background:'#192337', borderRadius:'16px', padding:'2rem', marginBottom:'2.5rem', color:'#fff' }}>
+          <h2 style={{ fontSize:'1.4rem', fontWeight:800, margin:'0 0 0.5rem', color:'#fff' }}>Power Verbs Cheat Sheet</h2>
+          <p style={{ color:'#94a3b8', lineHeight:1.7, marginBottom:'1.25rem', maxWidth:'700px' }}>Your choice of verb determines whether a bullet reads strong or weak. Use these domain-specific power verbs to signal expertise instantly.</p>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:'1rem' }}>
+            {[
+              { cat:'Engineering', verbs:'Architected · Engineered · Refactored · Optimized · Containerized · Scaled · Deployed · Automated' },
+              { cat:'DevOps & Cloud', verbs:'Orchestrated · Provisioned · Migrated · Hardened · Instrumented · Standardized · Remediated' },
+              { cat:'Data & AI', verbs:'Modeled · Ingested · Forecasted · Fine-tuned · Normalized · Visualized · Extracted · Indexed' },
+              { cat:'Leadership', verbs:'Spearheaded · Mentored · Championed · Mobilized · Recruited · Negotiated · Transformed · Delivered' },
+            ].map(({ cat, verbs }) => (
+              <div key={cat} style={{ background:'rgba(255,255,255,0.07)', borderRadius:'10px', padding:'1rem' }}>
+                <div style={{ fontSize:'0.75rem', fontWeight:800, color:'#ee571d', textTransform:'uppercase', marginBottom:'0.4rem' }}>{cat}</div>
+                <p style={{ fontSize:'0.85rem', color:'#cbd5e1', lineHeight:1.8, margin:0 }}>{verbs}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#172033', marginBottom: '0.75rem' }}>
+          Resume Writing — Common Questions
+        </h3>
+        <div style={{ display: 'grid', gap: '0.65rem' }}>
+          {[
+            ['How do I write a strong resume summary?', 'Your summary should state your role, years of experience, your biggest career achievement, and the value you bring to your next employer. Keep it to 2-3 sentences and tailor it for every application.'],
+            ['How many bullet points should each job have?', 'Three to five strong, quantified bullets per role. Prioritize recency and relevance — older or less relevant roles can have fewer. Quality beats quantity every time.'],
+            ['Should I include a photo on my resume?', 'In most English-speaking countries, including India when applying to global companies, a photo is not standard on a resume. Follow the norms of the country and industry you are applying to.'],
+            ['How do I make my resume stand out from hundreds of applicants?', 'Use specific numbers and outcomes in every bullet, tailor your skills section to match the job description, and include a professional summary that directly addresses the role requirements.'],
+          ].map(([q, a]) => (
+            <details key={q} style={{ padding: '1rem 1.15rem', border: '1px solid #e4e7ee', borderRadius: '10px', background: '#fff' }}>
+              <summary style={{ fontWeight: 700, color: '#253047', cursor: 'pointer' }}>{q}</summary>
+              <p style={{ marginTop: '0.65rem', color: '#58657a', lineHeight: 1.7 }}>{a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+    </>
   );
 };
 
