@@ -205,22 +205,38 @@ export const PaymentModal = ({ isOpen, onClose, resume, onPaymentSuccess }) => {
         {/* Pricing Box */}
         <div style={{ padding: '1.5rem' }}>
           <div style={{
-            background: '#F8FAFC',
+            background: 'linear-gradient(135deg, #EEF2FF 0%, #F8FAFC 100%)',
             border: '1px solid #E2E8F0',
             borderRadius: '14px',
             padding: '1rem 1.25rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '1.25rem'
+            marginBottom: '1.25rem',
+            boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7)'
           }}>
             <div>
-              <div style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: 600 }}>One-Time Download Fee</div>
-              <div style={{ fontSize: '0.75rem', color: '#10B981', fontWeight: 600 }}>Lifetime access for this resume</div>
+              <div style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: 700, letterSpacing: '0.02em' }}>One-Time Download Fee</div>
+              <div style={{ fontSize: '0.75rem', color: '#10B981', fontWeight: 700, marginTop: '4px' }}>Lifetime access for this resume</div>
             </div>
-            <div style={{ textAlign: 'right' }}>
-              <span style={{ textDecoration: 'line-through', color: '#94A3B8', fontSize: '0.9rem', marginRight: '6px' }}>₹199</span>
-              <span style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1E293B' }}>₹29</span>
+            <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ textDecoration: 'line-through', color: '#94A3B8', fontSize: '0.85rem', fontWeight: 700 }}>₹199</span>
+                <span style={{
+                  background: 'linear-gradient(135deg, #F59E0B 0%, #F97316 100%)',
+                  color: '#FFFFFF',
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  letterSpacing: '0.04em',
+                  textTransform: 'uppercase',
+                  borderRadius: '999px',
+                  padding: '6px 10px',
+                  boxShadow: '0 8px 18px rgba(249, 115, 22, 0.25)'
+                }}>
+                  Only
+                </span>
+              </div>
+              <div style={{ fontSize: '1.9rem', fontWeight: 900, color: '#0F172A', lineHeight: 1, letterSpacing: '-0.05em' }}>₹29</div>
             </div>
           </div>
 

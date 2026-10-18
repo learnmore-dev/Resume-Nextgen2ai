@@ -71,6 +71,10 @@ export const LandingPage = () => {
         <div className="home-hero-dots home-dots-right"></div>
         <div className="home-hero-wireframe home-wireframe-resume"></div>
         <div className="home-hero-wireframe home-wireframe-briefcase"></div>
+        <div className="home-offer-sticker" aria-label="Resume PDF offer: ₹29 only, reduced from ₹199">
+          <span className="home-offer-old">₹199</span>
+          <span className="home-offer-price">₹29 <small>Only</small></span>
+        </div>
 
         <div className="home-hero-container">
           {/* Top Pill Badge */}
@@ -81,8 +85,8 @@ export const LandingPage = () => {
 
           {/* Main Title */}
           <h1 className="home-hero-title">
-            AI-Powered Resumes<br />
-            That <span className="highlight-noticed">Open Doors</span>
+            Free Resume Builder Online<br />
+            That <span className="highlight-noticed">Opens Doors</span>
           </h1>
 
           {/* Subtitle */}
@@ -127,9 +131,9 @@ export const LandingPage = () => {
 
             {/* Floating Resume Score Badge */}
             <div className="hero-floating-score-badge">
-              <span className="score-badge-label">Resume Score</span>
-              <span className="score-badge-value">92%</span>
-              <span className="score-badge-sub">Good to go!</span>
+              <span className="score-badge-value">95%</span>
+              <span className="score-badge-label">ATS Match</span>
+              <span className="score-badge-sub">Score</span>
             </div>
           </div>
 

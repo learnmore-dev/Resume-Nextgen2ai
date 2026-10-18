@@ -36,6 +36,13 @@ export const Footer = () => {
               <li><Link to="/privacy">Privacy policy</Link></li>
               <li><Link to="/careers">Career</Link></li>
               <li><Link to="/contact">Contact us</Link></li>
+              <li><Link to="/ats-resume-builder">ATS Friendly Resume Builder</Link></li>
+              <li><Link to="/resume-builder-for-freshers">Resume Builder for Freshers</Link></li>
+              <li><Link to="/resume-templates">Free Resume Templates</Link></li>
+              <li><Link to="/student-resume-builder">Resume Builder for Students</Link></li>
+              <li><Link to="/resume-builder-for-experienced">Resume Builder for Experienced Professionals</Link></li>
+              <li><Link to="/resume-examples">Resume Examples</Link></li>
+              <li><Link to="/resume-maker-pdf">Resume Maker PDF</Link></li>
             </ul>
           </div>
 
